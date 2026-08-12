@@ -680,10 +680,66 @@ a { text-decoration:none; }
     font-size:19px;
   }
 }
+
+.mobile-gate {
+  display:none;
+}
+
+@media (max-width: 760px), (pointer: coarse) and (max-width: 900px) {
+  body {
+    overflow:hidden;
+    background:var(--bg);
+  }
+
+  header,
+  main.viewport {
+    display:none !important;
+  }
+
+  .mobile-gate {
+    position:fixed;
+    inset:0;
+    z-index:99999;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:26px;
+    padding:28px;
+    text-align:center;
+    background:
+      radial-gradient(circle at 20% 15%, rgba(var(--accent-rgb),.15), transparent 38%),
+      var(--bg);
+  }
+
+  .mobile-gate-text {
+    max-width:90vw;
+    color:var(--ink);
+    font-family:"Dihjauti Bold","Arial",sans-serif;
+    font-size:clamp(30px,10vw,54px);
+    line-height:1.02;
+  }
+
+  .mobile-gate img {
+    display:block;
+    max-width:min(62vw,220px);
+    max-height:34vh;
+    width:auto;
+    height:auto;
+    object-fit:contain;
+  }
+}
+
 </style>
 </head>
 
 <body>
+
+<div class="mobile-gate" id="mobileGate" aria-label="Mobile notice">
+  <div class="mobile-gate-text">лучше смотреть desktop версию :)</div>
+  <img id="mobileRandomGif" alt="">
+</div>
+
 <header class="header">
   <div class="top-row">
     <div class="brand">
@@ -721,6 +777,20 @@ const viewport=document.getElementById("viewport");
 const yearNav=document.getElementById("yearNav");
 const LINK_LABEL_EN={"13-й выпуск Internet":"13th issue of Internet","5-й выпуск Zhurnal.ru":"5th issue of Zhurnal.ru","@Rus":"@Rus","ArtPalace":"ArtPalace","Association for Progressive Communications":"Association for Progressive Communications","Cityline":"Cityline","ClickZ":"ClickZ","CompTek":"CompTek","Cooking.ru":"Cooking.ru","CrazyWEB":"CrazyWEB","CrazyWeb":"CrazyWeb","Demos Online":"Demos Online","EUnet/Relcom":"EUnet/Relcom","Elections99.com":"Elections99.com","Emul8":"Emul8","Emulation.net":"Emulation.net","End of The World News":"End of The World News","Eugene’s Electronic Library":"Eugene’s Electronic Library","Forum.msk.ru":"Forum.msk.ru","Futures Telecom":"Futures Telecom","Hack Zone":"Hack Zone","Human Resources Online":"Human Resources Online","IREX":"IREX","Intellectual Capital":"Intellectual Capital","Internet Media House Russia":"Internet Media House Russia","Internet Society":"Internet Society","Internet.ru":"Internet.ru","Lenta.ru":"Lenta.ru","Mail.ru":"Mail.ru","Mirabilis / ICQ":"Mirabilis / ICQ","Monitoring.ru":"Monitoring.ru","Music.ru":"Music.ru","Net Art":"Net Art","Net-культура":"Net Culture","News Alert":"News Alert","POMAH":"POMAH","PSyberLink":"PSyberLink","PUG":"PUG","Pochta.ru":"Pochta.ru","Promo.Ru":"Promo.Ru","RB2":"RB2","RELARN":"RELARN","RUNNet":"RUNNet","RadioNet":"RadioNet","Rambler":"Rambler","Rambler’s Top 100":"Rambler’s Top 100","Reklama.ru":"Reklama.ru","Rumours.ru":"Rumours.ru","Russia on the Net":"Russia on the Net","SpyLOG":"SpyLOG","Stars.ru":"Stars.ru","Tim Promotion":"Tim Promotion","Ukraine.org":"Ukraine.org","Upground Music Newsletter":"Upground Music Newsletter","Vesti.ru":"Vesti.ru","WebDesign":"WebDesign","Window-To-Russia":"Window-To-Russia","eMedia":"eMedia","laws.ru":"laws.ru","lujkov.ru":"lujkov.ru","www.relcom.ru":"www.relcom.ru","«Кто в Совмине всех плохее?»":"Who Is the Worst in the Cabinet?","Анекдоты из России":"Russian Anecdotes","Бард-Кафе":"Bard Café","Бессрочная ссылка":"Indefinite Link","Библиотека Мошкова":"Moshkov Library","Бизнес-сайт’99":"Business Site ’99","Буриме":"Burime","Вечерний Интернет":"Evening Internet","Виртуальный Мавзолей Ленина":"Virtual Lenin Mausoleum","Внуки Даждьбога":"Grandsons of Dazhdbog","Всероссийская Интернет-академия":"All-Russian Internet Academy","Гонорар Биллу Клинтону":"Honorarium to Bill Clinton","Да-да-нет":"Da-Da-Net","Еже-движение":"Ezhe Movement","Жалобная книга «Буриме»":"Burime Complaint Book","Журнальный зал":"Magazine Hall","Золотой УРЛ":"Golden URL","Интернет-парламент":"Internet Parliament","Интернет-фестиваль’99":"Internet Festival ’99","Интернет. Общество. Личность":"Internet. Society. Personality","Интернить’99":"Internit ’99","Инфоарт":"Infoart","Инфократия":"Infocracy","Карта русскоязычных ресурсов":"Map of Russian-language Resources","Кирилл и Мефодий":"Kirill & Mefodiy","Коготь-2":"Kogot-2","Комкон":"Komkon","Компьютерра":"Computerra","Кроватка":"Krovatka","Либертариум":"Libertarium","Мир Internet":"Mir Internet","Московский музыкальный вестник":"Moscow Music Bulletin","Мы — за Барака!":"We Are for Barak!","НЖМД":"NZhMD","Национальная Интел Интернет Премия":"National Intel Internet Prize","Национальная служба новостей":"National News Service","Наши Сети":"Our Networks","Независимая газета":"Nezavisimaya Gazeta","Обзирания русского Интернета":"Overviews of the Russian Internet","Объединённая властная группировка":"United Power Grouping","Онейрократия":"Oneirocracy","Открытые системы":"Open Systems","Паравозов-News":"Paravozov-News","Перелётные мухи":"Migratory Flies","Полит.ру":"Polit.ru","Правда.ру":"Pravda.ru","РБК":"RBC","РОЦИТ":"ROCIT","Радио 101":"Radio 101","Релком":"Relcom","Робот Сергей Дацюк":"Robot Sergey Datsyuk","РосБизнесКонсалтинг":"RosBusinessConsulting","РосНИИРОС":"RosNIIROS","Российская Академия Интернет":"Russian Academy of the Internet","Российский Интернет Форум":"Russian Internet Forum","Россия-Он-Лайн":"Russia-On-Line","Россия: выборы-95":"Russia: Elections-95","Русская виртуальная библиотека":"Russian Virtual Library","Русский POP / Zema.Ru":"Russian POP / Zema.Ru","Русский Журнал":"Russian Journal","СМИ.Ру":"SMI.ru","Сад расходящихся хокку":"Garden of Forking Haiku","Сеновал":"Senoval","Серебряный Дождь":"Silver Rain","Сетевая словесность":"Network Literature","Симплекс":"Simplex","Система TAU":"TAU System","СовИнформБюро":"SovInformBuro","Современное искусство в Сети":"Contemporary Art on the Web","Союз операторов Интернет":"Union of Internet Operators","Тенета":"Teneta","Тетрис":"Tetris","Уголовный розыск Санкт-Петербурга":"St Petersburg Criminal Investigation","Университетские центры Интернет":"University Internet Centers","Утро":"Utro","Учительская газета":"Teacher's Gazette","Фонд эффективной политики":"Foundation for Effective Politics","Чертовы Кулички":"Chertovy Kulichki","Яndex":"Yandex","архив Gazeta.ru":"Gazeta.ru archive","журнал Internet":"Internet magazine","источник 19":"source 19","источник 26":"source 26","источник о каталоге «Ау!»":"source on the “Au!” catalogue","клуб любителей Rambler Top 100":"Rambler Top 100 fan club","неформальная страница Немцова":"unofficial Nemtsov page","официальный сайт Немцова":"Nemtsov official site","первый номер Zhurnal.ru":"first issue of Zhurnal.ru","почтовый декодер":"e-mail decoder","раздел о СОРМ-2":"SORM-2 section","сайт Сергея Кириенко":"Sergei Kiriyenko site","семейный поиск":"family search","сервер в Россию":"server in Russia","станция «Мир»":"Mir space station","статья о хакерах":"article on hackers","третий выпуск Zhurnal.ru":"third issue of Zhurnal.ru","церемония «Тенета-Ринет’98»":"Teneta-Rinet ’98 ceremony"};
 const AMBIENT_FILES={"1990":["https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1990_RelcomHomeLogo.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1990_apc.jpg","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1990_book-727244963.jpg","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1990_glas.png","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1990_sv.gif"],"1991":["https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1991_ServerLogo.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1991_comp1top.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1991_isoc_logo.gif"],"1992":["https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1992_bugging.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1992_raznye.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1992_rlibrary.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1992_rusnet.gif"],"1993":["https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1993_hosting1.jpg"],"1994":["https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1994_indigo2.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1994_indy.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1994_logo_bear2.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1994_satllte.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1994_top9.jpg"],"1995":["https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1995_cw.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1995_freedom.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1995_ns.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1995_reach.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1995_rtitle.gif"],"1996":["https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1996_kr3.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1996_teneta.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1996_tetris.gif"],"1997":["https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1997_eown.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1997_icqlogo3.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1997_index-09.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1997_koleso32x2.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1997_logon.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1997_main.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1997_mux.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1997_title.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1997_top1.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1997_top_left.gif"],"1998":["https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1998_Logoart.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1998_fasad11.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1998_sis.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1998_timprod1.jpg"],"1999":["https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_2logo.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_2r_n.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_center3.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_knop_ovg.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_lo-fest-m.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_lo.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_log.jpg","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_logo.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_logo2.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_ripn13.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_uho.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_uho4.gif"]};
+
+function setRandomMobileGif(){
+  const img=document.getElementById("mobileRandomGif");
+  if(!img) return;
+
+  const gifs=Object.values(AMBIENT_FILES)
+    .flat()
+    .filter(url=>/\.gif(?:$|\?)/i.test(url));
+
+  if(!gifs.length) return;
+
+  const picked=gifs[Math.floor(Math.random()*gifs.length)];
+  img.src=picked;
+}
 
 function toRgbTriplet(hex){
   const clean=hex.replace("#","").trim();
@@ -780,8 +850,8 @@ function initAmbient(page, year){
   const states=[];
   const rand=seedRandom(year * 7919 + 41);
 
-  const MIN_WIDTH=70;
-const MAX_WIDTH=140;
+  const MIN_WIDTH=70;  
+  const MAX_WIDTH=140;  
   const EDGE_PAD=8;
 
   function bounds(){
@@ -842,7 +912,7 @@ const MAX_WIDTH=140;
       const naturalW=Math.max(1,img.naturalWidth || MIN_WIDTH);
       const naturalH=Math.max(1,img.naturalHeight || naturalW*.55);
 
-
+ 
       const slightScale=1 + rand()*.12;
       const targetW=Math.min(
         MAX_WIDTH,
@@ -896,7 +966,6 @@ const MAX_WIDTH=140;
       dx/=len;
       dy/=len;
 
-
       const impulse=(strong ? 270 : 120) + rand()*(strong ? 250 : 130);
       state.vx += dx*impulse;
       state.vy += dy*impulse;
@@ -915,6 +984,7 @@ const MAX_WIDTH=140;
     const dt=Math.min(.032,Math.max(.001,(now-lastTime)/1000));
     lastTime=now;
 
+
     const pageDistance=Math.abs(page.offsetLeft-viewport.scrollLeft);
     const active=pageDistance < viewport.clientWidth*.78;
 
@@ -923,12 +993,11 @@ const MAX_WIDTH=140;
       states.forEach(s=>{
         if(!s.ready) return;
 
-    
+ 
         const t=now/1000;
         s.vx += Math.sin(t*s.freq+s.phase)*4.4*dt;
         s.vy += Math.cos(t*s.freq2+s.phase2)*4.0*dt;
 
-    
         const speed=Math.hypot(s.vx,s.vy);
         if(speed>48){
           const decay=Math.pow(.955,dt*60);
@@ -948,7 +1017,7 @@ const MAX_WIDTH=140;
         const maxX=Math.max(minX,b.width-s.w-EDGE_PAD);
         const maxY=Math.max(minY,b.height-s.h-EDGE_PAD);
 
-        // Hard page borders: images always stay fully inside the year page.
+
         if(s.x<minX){
           s.x=minX;
           s.vx=Math.abs(s.vx)*(.78+rand()*.14);
@@ -1188,7 +1257,7 @@ function updateHeader() {
 
   document.getElementById("subtitle").innerHTML=
     state.lang==="ru"
-      ? `интерактивный пересказ Летописи русского интернета <a class="author" href="https://web.archive.org/web/*/https://www.netslova.ru/gorny/" target="_blank" rel="noopener">Евгения Горного</a>`
+      ? `интерактивный пересказ летописи русского интернета <a class="author" href="https://web.archive.org/web/*/https://www.netslova.ru/gorny/" target="_blank" rel="noopener">Евгения Горного</a>`
       : `an interactive retelling of the Chronicle of the Russian Internet by <a class="author" href="https://web.archive.org/web/*/https://www.netslova.ru/gorny/" target="_blank" rel="noopener">Evgeny Gorny</a>`;
 
   document.getElementById("ru").classList.toggle("active",state.lang==="ru");
@@ -1239,11 +1308,11 @@ viewport.addEventListener("wheel",(e)=>{
     const canScrollUp=page.scrollTop > 2;
 
     if((e.deltaY>0 && canScrollDown) || (e.deltaY<0 && canScrollUp)){
-      // Let the year page consume the wheel event vertically.
+
       return;
     }
 
-    // At the top/bottom boundary, continue through the timeline horizontally.
+   
     e.preventDefault();
     viewport.scrollLeft+=e.deltaY;
     return;
@@ -1282,6 +1351,7 @@ viewport.addEventListener("scroll",()=>{
 });
 
 applyAccent(state.accent);
+setRandomMobileGif();
 render();
 </script>
 </body>
