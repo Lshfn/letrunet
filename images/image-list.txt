@@ -21,8 +21,19 @@
 1995_ns.gif
 1995_reach.gif
 1995_rtitle.gif
+1996_kr3.gif
 1996_teneta.gif
 1996_tetris.gif
+1997_eown.gif
+1997_icqlogo3.gif
+1997_index-09.gif
+1997_koleso32x2.gif
+1997_logon.gif
+1997_main.gif
+1997_mux.gif
+1997_title.gif
+1997_top1.gif
+1997_top_left.gif
 1998_Logoart.gif
 1998_fasad11.gif
 1998_sis.gif
@@ -39,5 +50,3 @@
 1999_ripn13.gif
 1999_uho.gif
 1999_uho4.gif
-
-Note: The repository listing returned by the API was paginated and there may be additional image files in other pages or subdirectories. To view the full contents in the GitHub UI, see: https://github.com/Lshfn/letrunet/tree/main
