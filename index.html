@@ -780,8 +780,8 @@ function initAmbient(page, year){
   const states=[];
   const rand=seedRandom(year * 7919 + 41);
 
-  const MIN_WIDTH=105;  // a little smaller than the Internet Society example
-  const MAX_WIDTH=210;  // approximately the APC example in the screenshot
+  const MIN_WIDTH=70;
+const MAX_WIDTH=140;
   const EDGE_PAD=8;
 
   function bounds(){
@@ -797,8 +797,6 @@ function initAmbient(page, year){
     const maxX=Math.max(EDGE_PAD,b.width-w-EDGE_PAD);
     const maxY=Math.max(EDGE_PAD,b.height-h-EDGE_PAD);
 
-    // Spread initial positions over the whole page rather than a right-side cluster.
-    // A coarse grid plus jitter gives visible distribution without rigid alignment.
     const cols=4;
     const rows=Math.max(2,Math.ceil(items.length/cols));
     const cell=index % (cols*rows);
@@ -844,9 +842,7 @@ function initAmbient(page, year){
       const naturalW=Math.max(1,img.naturalWidth || MIN_WIDTH);
       const naturalH=Math.max(1,img.naturalHeight || naturalW*.55);
 
-      // Use the original width when it already falls inside the visual range;
-      // otherwise clamp to the range defined by the screenshots. Within the
-      // range, allow only a small enlargement.
+
       const slightScale=1 + rand()*.12;
       const targetW=Math.min(
         MAX_WIDTH,
@@ -900,12 +896,11 @@ function initAmbient(page, year){
       dx/=len;
       dy/=len;
 
-      // Strong and deliberately variable impulse.
+
       const impulse=(strong ? 270 : 120) + rand()*(strong ? 250 : 130);
       state.vx += dx*impulse;
       state.vy += dy*impulse;
 
-      // Add a sideways kick so repeated hovers do not produce the same path.
       const tangent=(rand()-.5)*(strong ? 190 : 90);
       state.vx += -dy*tangent;
       state.vy += dx*tangent;
@@ -920,7 +915,6 @@ function initAmbient(page, year){
     const dt=Math.min(.032,Math.max(.001,(now-lastTime)/1000));
     lastTime=now;
 
-    // Only spend animation work on the currently visible horizontal page.
     const pageDistance=Math.abs(page.offsetLeft-viewport.scrollLeft);
     const active=pageDistance < viewport.clientWidth*.78;
 
@@ -929,13 +923,12 @@ function initAmbient(page, year){
       states.forEach(s=>{
         if(!s.ready) return;
 
-        // Soft changing current: it bends trajectories instead of making
-        // every image repeat a fixed loop.
+    
         const t=now/1000;
         s.vx += Math.sin(t*s.freq+s.phase)*4.4*dt;
         s.vy += Math.cos(t*s.freq2+s.phase2)*4.0*dt;
 
-        // After a strong hover impulse, gradually return to a slow drift.
+    
         const speed=Math.hypot(s.vx,s.vy);
         if(speed>48){
           const decay=Math.pow(.955,dt*60);
