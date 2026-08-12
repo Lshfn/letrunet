@@ -33,6 +33,7 @@
   --ink:#18191b;
   --muted:#7b797d;
   --accent:#29C4D9;
+  --accent-rgb:41,196,217;
   --head-h:226px;
 }
 
@@ -63,8 +64,8 @@ a { text-decoration:none; }
   background:
     linear-gradient(
       180deg,
-      rgba(41,196,217,.25) 0%,
-      rgba(41,196,217,.12) 31%,
+      rgba(var(--accent-rgb),.25) 0%,
+      rgba(var(--accent-rgb),.12) 31%,
       rgba(255,252,253,.96) 73%,
       var(--bg) 100%
     );
@@ -117,9 +118,44 @@ a { text-decoration:none; }
   display:flex;
   gap:7px;
   align-items:center;
+  flex-wrap:wrap;
   padding-top:10px;
 }
 
+.color-control {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  height:38px;
+  padding:0 10px;
+  border:1px solid var(--ink);
+  background:rgba(255,252,253,.62);
+  cursor:pointer;
+  user-select:none;
+}
+.color-label {
+  font-size:12px;
+  line-height:1;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+.color-input {
+  width:26px;
+  height:26px;
+  padding:0;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+}
+.color-input::-webkit-color-swatch-wrapper { padding:0; }
+.color-input::-webkit-color-swatch {
+  border:1px solid var(--ink);
+  border-radius:0;
+}
+.color-input::-moz-color-swatch {
+  border:1px solid var(--ink);
+  border-radius:0;
+}
 .ctrl {
   height:38px;
   min-width:40px;
@@ -197,10 +233,10 @@ a { text-decoration:none; }
   background:
     radial-gradient(
       ellipse 410px 600px at 0% 100%,
-      rgba(41,196,217,.30) 0%,
-      rgba(41,196,217,.17) 36%,
-      rgba(41,196,217,.06) 60%,
-      rgba(41,196,217,0) 78%
+      rgba(var(--accent-rgb),.30) 0%,
+      rgba(var(--accent-rgb),.17) 36%,
+      rgba(var(--accent-rgb),.06) 60%,
+      rgba(var(--accent-rgb),0) 78%
     ),
     var(--bg);
 }
@@ -215,7 +251,7 @@ a { text-decoration:none; }
   background:linear-gradient(
     90deg,
     var(--accent) 0%,
-    rgba(41,196,217,.50) 55%,
+    rgba(var(--accent-rgb),.50) 55%,
     transparent 100%
   );
 }
@@ -274,45 +310,46 @@ a { text-decoration:none; }
     filter:blur(0px);
     transform:translateY(0) scaleY(1);
     text-shadow:
-      0 0 0 rgba(41,196,217,.25),
-      0 0 0 rgba(41,196,217,.18);
+      0 0 0 rgba(var(--accent-rgb),.25),
+      0 0 0 rgba(var(--accent-rgb),.18);
   }
   18% {
     opacity:.36;
     filter:blur(2px);
     transform:translateY(9px) scaleY(1.035);
     text-shadow:
-      0 8px 3px rgba(41,196,217,.24),
-      0 18px 7px rgba(41,196,217,.14);
+      0 8px 3px rgba(var(--accent-rgb),.24),
+      0 18px 7px rgba(var(--accent-rgb),.14);
   }
   42% {
     opacity:.27;
     filter:blur(6px);
     transform:translateY(34px) scaleY(1.11);
     text-shadow:
-      0 14px 7px rgba(41,196,217,.20),
-      0 34px 13px rgba(41,196,217,.13),
-      0 58px 19px rgba(41,196,217,.08);
+      0 14px 7px rgba(var(--accent-rgb),.20),
+      0 34px 13px rgba(var(--accent-rgb),.13),
+      0 58px 19px rgba(var(--accent-rgb),.08);
   }
   70% {
     opacity:.15;
     filter:blur(13px);
     transform:translateY(83px) scaleY(1.23);
     text-shadow:
-      0 22px 12px rgba(41,196,217,.16),
-      0 52px 21px rgba(41,196,217,.10),
-      0 92px 30px rgba(41,196,217,.06);
+      0 22px 12px rgba(var(--accent-rgb),.16),
+      0 52px 21px rgba(var(--accent-rgb),.10),
+      0 92px 30px rgba(var(--accent-rgb),.06);
   }
   100% {
     opacity:0;
     filter:blur(24px);
     transform:translateY(165px) scaleY(1.38);
     text-shadow:
-      0 32px 18px rgba(41,196,217,.10),
-      0 78px 30px rgba(41,196,217,.06),
-      0 132px 42px rgba(41,196,217,.03);
+      0 32px 18px rgba(var(--accent-rgb),.10),
+      0 78px 30px rgba(var(--accent-rgb),.06),
+      0 132px 42px rgba(var(--accent-rgb),.03);
   }
 }
+
 
 .year-summary {
   max-width:255px;
@@ -322,6 +359,48 @@ a { text-decoration:none; }
   letter-spacing:-.008em;
   text-wrap:balance;
   text-align:left;
+  hyphens:none;
+  -webkit-hyphens:none;
+}
+
+.year-ambient {
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  z-index:4;
+  pointer-events:none;
+}
+
+.ambient-item {
+  position:absolute;
+  left:0;
+  top:0;
+  width:1px;
+  height:1px;
+  opacity:0;
+  pointer-events:auto;
+  will-change:transform,opacity;
+  transition:opacity .38s ease;
+  transform:translate3d(0,0,0);
+}
+
+.ambient-item.ready {
+  opacity:1;
+}
+
+.ambient-media {
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  opacity:1;
+  filter:none;
+  pointer-events:none;
+  user-select:none;
+  -webkit-user-drag:none;
 }
 
 .event-columns {
@@ -345,7 +424,7 @@ a { text-decoration:none; }
 
 .event {
   display:grid;
-  grid-template-columns:116px minmax(0,1fr);
+  grid-template-columns:110px minmax(0,1fr);
   gap:18px;
   padding:5px 0 12px;
   margin-bottom:22px;
@@ -356,36 +435,49 @@ a { text-decoration:none; }
 }
 
 .event-date {
-  width:116px;
-  min-width:116px;
-  padding-top:2px;
-  overflow:visible;
+  width:110px;
+  min-width:110px;
+  padding-top:1px;
+  overflow:hidden;
 }
 
 .date-code {
-  display:block;
   width:100%;
-  min-height:42px;
+  height:66px;
+  display:grid;
+  grid-template-rows:30px 30px;
+  align-content:start;
   color:var(--accent);
   font-family:"Dihjauti Italic","Arial",sans-serif;
-  font-size:39px;
-  line-height:1;
-  letter-spacing:-.02em;
-  white-space:nowrap;
+  font-size:31px;
+  line-height:30px;
+  letter-spacing:-.018em;
   font-variant-numeric:tabular-nums;
   font-feature-settings:"tnum" 1;
 }
 
-.date-code.range {
-  font-size:28px;
-  letter-spacing:-.025em;
+.date-line {
+  display:block;
+  width:100%;
+  height:30px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-align:left;
+}
+
+.date-line.empty {
+  visibility:hidden;
 }
 
 .event-copy {
   min-width:0;
   font-size:16px;
   line-height:1.43;
-  overflow-wrap:anywhere;
+  hyphens:none;
+  -webkit-hyphens:none;
+  overflow-wrap:normal;
+  word-break:normal;
+  text-wrap:pretty;
 }
 
 
@@ -474,14 +566,17 @@ a { text-decoration:none; }
     margin-bottom:16px;
   }
   .event-date {
-    width:96px;
-    min-width:96px;
+    width:92px;
+    min-width:92px;
   }
   .date-code {
-    font-size:32px;
+    height:58px;
+    grid-template-rows:27px 27px;
+    font-size:27px;
+    line-height:27px;
   }
-  .date-code.range {
-    font-size:23px;
+  .date-line {
+    height:27px;
   }
   .event-copy {
     font-size:13.5px;
@@ -514,6 +609,14 @@ a { text-decoration:none; }
   }
   .controls {
     padding-top:4px;
+  }
+  .color-control {
+    height:34px;
+    padding:0 8px;
+  }
+  .color-input {
+    width:22px;
+    height:22px;
   }
   .year-nav {
     overflow-x:auto;
@@ -558,14 +661,17 @@ a { text-decoration:none; }
     grid-template-columns:104px minmax(0,1fr);
   }
   .event-date {
-    width:104px;
-    min-width:104px;
+    width:92px;
+    min-width:92px;
   }
   .date-code {
-    font-size:33px;
+    height:58px;
+    grid-template-rows:27px 27px;
+    font-size:27px;
+    line-height:27px;
   }
-  .date-code.range {
-    font-size:24px;
+  .date-line {
+    height:27px;
   }
   .event-copy {
     font-size:15px;
@@ -583,8 +689,8 @@ a { text-decoration:none; }
     <div class="brand">
       <h1 class="title" id="title">ЛЕТОПИСЬ РУССКОГО ИНТЕРНЕТА</h1>
       <p class="subtitle" id="subtitle">
-        интерактивный пересказ Летописи русского интернета
-        <a class="author" href="https://www.netslova.ru/gorny/" target="_blank" rel="noopener">Евгения Горного</a>
+        интерактивный пересказ летописи русского интернета
+        <a class="author" href="https://web.archive.org/web/*/https://www.netslova.ru/gorny/" target="_blank" rel="noopener">Евгения Горного</a>
       </p>
     </div>
 
@@ -593,6 +699,10 @@ a { text-decoration:none; }
       <button class="ctrl" id="next" type="button" aria-label="Следующий год">→</button>
       <button class="ctrl active" id="ru" type="button">RU</button>
       <button class="ctrl" id="en" type="button">EN</button>
+      <label class="color-control" id="accentWrap" title="Accent color">
+        <span class="color-label" id="colorLabel">цвет</span>
+        <input class="color-input" id="accentPicker" type="color" value="#29C4D9" aria-label="Accent color">
+      </label>
     </div>
   </div>
 
@@ -604,25 +714,298 @@ a { text-decoration:none; }
 </main>
 
 <script>
-const DATA=[{"year":1990,"summary":{"ru":"Гласнет, Релком, UUCP и домен .SU.","en":"Glasnet, Relcom, UUCP and the .SU domain."},"events":[{"date":{"ru":"январь","en":"January"},"text":{"ru":"Создана общественная организация «Гласнет». При поддержке Association for Progressive Communications она обеспечивала сетевой связью учителей, правозащитников, экологов и другие общественные группы; в 1990 году около 50 пользователей обслуживали три модемные линии.","en":"The public organization Glasnet is created. With support from the Association for Progressive Communications, it provides network access to teachers, human-rights activists, environmentalists and other civic groups; in 1990 about 50 users are served by three modem lines."},"links":[{"label":"Association for Progressive Communications","url":"https://www.apc.org/","archived":false}]},{"date":{"ru":"август","en":"August"},"text":{"ru":"Основана сеть «Релком» — название образовано от RELiable COMmunications. В её создании участвовали специалисты кооператива «Демос», многие из Курчатовского института. К концу года подключены около 30 организаций.","en":"Relcom is founded — its name comes from RELiable COMmunications. Specialists from the Demos cooperative, many from the Kurchatov Institute, take part in its creation. By year’s end about 30 organizations are connected."},"links":[{"label":"Релком","url":"http://www.relcom.ru/","archived":true}]},{"date":{"ru":"1990","en":"1990"},"text":{"ru":"Сеть работает на электронной почте UUCP: почта передаётся между узлами по модему во время сеансов связи, при этом возможна переписка на русском языке.","en":"The network is based on UUCP e-mail: mail is transferred between nodes by modem during connection sessions, with Russian-language correspondence supported."},"links":[]},{"date":{"ru":"28 августа","en":"28 August"},"text":{"ru":"Проведён первый сеанс телекоммуникационной связи с Финляндией по международному телефону. Горный отмечает, что по другим источникам аналогичное событие относят к июлю 1989 года.","en":"The first telecommunications session with Finland is carried out over an international telephone line. Gorny notes that other sources date a comparable event to July 1989."},"links":[]},{"date":{"ru":"19 сентября","en":"19 September"},"text":{"ru":"В базе InterNIC зарегистрирован домен верхнего уровня .SU.","en":"The .SU top-level domain is registered in the InterNIC database."},"links":[]}]},{"year":1991,"summary":{"ru":"TCP/IP, внутренний трафик, C-News и первые русскоязычные непрограммистские телеконференции.","en":"TCP/IP, domestic traffic, C-News and the first Russian-language non-programmer newsgroups."},"events":[{"date":{"ru":"февраль","en":"February"},"text":{"ru":"«Релком» организует первое в России модемное соединение Москва—Барнаул на скорости 9600 бод с использованием TCP/IP.","en":"Relcom establishes what the chronicle calls Russia’s first Moscow–Barnaul modem connection at 9600 baud using TCP/IP."},"links":[{"label":"Релком","url":"http://www.relcom.ru/","archived":true}]},{"date":{"ru":"1 мая","en":"1 May"},"text":{"ru":"Объём информации, пересылаемой внутри России, становится больше объёма обмена с Западом. В летописи этот момент сформулирован как превращение сети в «реально российскую».","en":"Traffic exchanged inside Russia exceeds traffic going to and from the West. The chronicle marks this as the point at which the network becomes effectively Russian."},"links":[]},{"date":{"ru":"июль","en":"July"},"text":{"ru":"«Релком» участвует в Internet Society и начинает использовать выделенный канал Москва—Таллин—Хельсинки.","en":"Relcom participates in the Internet Society and begins using a dedicated Moscow–Tallinn–Helsinki link."},"links":[{"label":"Internet Society","url":"https://www.internetsociety.org/","archived":false}]},{"date":{"ru":"1991","en":"1991"},"text":{"ru":"Осваивается C-News — межузловое распространение материалов телеконференций — и вводится первая версия почтового сервера телеконференций.","en":"C-News is adopted for inter-node distribution of newsgroup material, and the first version of an e-mail-based conference server is introduced."},"links":[]},{"date":{"ru":"конец года","en":"Year end"},"text":{"ru":"В «Релкоме» представлены крупные города России, некоторые страны СНГ и Балтии.","en":"Relcom now includes major Russian cities as well as locations in some CIS and Baltic countries."},"links":[]},{"date":{"ru":"конец года","en":"Year end"},"text":{"ru":"Институт коммерческой инженерии начинает проект «ИнфоРынок». relcom.infomarket.talk и relcom.infomarket.quote названы первыми российскими русскоязычными телеконференциями, рассчитанными не на программистов.","en":"The Institute of Commercial Engineering starts InfoMarket. relcom.infomarket.talk and relcom.infomarket.quote are described as the first Russian-language Russian newsgroups aimed beyond programmers."},"links":[]}]},{"year":1992,"summary":{"ru":"EUnet/Relcom, on-line IP, RELARN, FTP-архивы и первые русские серверы за рубежом.","en":"EUnet/Relcom, online IP, RELARN, FTP archives and early Russian servers abroad."},"events":[{"date":{"ru":"июль","en":"July"},"text":{"ru":"«Релком» официально регистрируется в панъевропейской EUnet как EUnet/Relcom; в летописи сеть названа крупнейшей на европейском континенте. Создано АО «Релком».","en":"Relcom is officially registered in the pan-European EUnet as EUnet/Relcom; the chronicle describes it as the largest network on the European continent. Relcom becomes a joint-stock company."},"links":[{"label":"EUnet/Relcom","url":"http://www.relcom.eu.net/History/","archived":true}]},{"date":{"ru":"середина года","en":"Mid-year"},"text":{"ru":"АО «Релком» начинает экспериментальное внедрение on-line IP, позволяющего работать в реальном времени и использовать сервисы помимо электронной почты.","en":"Relcom begins experimental deployment of online IP, enabling real-time connectivity and services beyond e-mail."},"links":[]},{"date":{"ru":"середина года","en":"Mid-year"},"text":{"ru":"Начинается создание научной некоммерческой сети RELARN. Новый канал на Запад через Амстердам примерно в четыре раза увеличивает пропускную способность.","en":"Work begins on the non-commercial academic network RELARN. A new western link through Amsterdam increases bandwidth by roughly four times."},"links":[{"label":"RELARN","url":"http://www.relarn.ru/","archived":true}]},{"date":{"ru":"1992","en":"1992"},"text":{"ru":"Сергей Наумов создаёт в США «Внуков Даждьбога» — сначала FTP-архив материалов о русском язычестве, с весны 1993 года переведённый на WWW.","en":"Sergey Naumov creates Grandchildren of Dazhdbog in the US — initially an FTP archive about Russian paganism, moved to the Web in spring 1993."},"links":[{"label":"Внуки Даждьбога","url":"http://metalab.unc.edu/","archived":true}]},{"date":{"ru":"сентябрь","en":"September"},"text":{"ru":"Вадим Маслов открывает в США «СовИнформБюро» — первый, по летописи, целиком русский сервер за границей; сначала FTP-архив, с лета 1993 года — WWW.","en":"Vadim Maslov opens SovInformBuro in the US, described as the first entirely Russian server abroad; first an FTP archive, then on the Web from summer 1993."},"links":[{"label":"СовИнформБюро","url":"http://www.siber.com/","archived":true}]},{"date":{"ru":"октябрь","en":"October"},"text":{"ru":"Впервые организуется оперативное распространение по сети электронных версий «Известий» и некоторых других российских периодических изданий.","en":"Electronic versions of Izvestia and several other Russian periodicals begin to be distributed rapidly over the network."},"links":[]},{"date":{"ru":"октябрь","en":"October"},"text":{"ru":"Евгений Пескин основывает Eugene’s Electronic Library — FTP-архив свободно распространяемой литературы; в 1994 году проект переходит на WWW и русскоязычные тексты.","en":"Evgeny Peskin founds Eugene’s Electronic Library, an FTP archive of freely distributed literature; in 1994 it moves to the Web and Russian-language texts."},"links":[{"label":"Eugene’s Electronic Library","url":"http://www.online.ru/","archived":true}]}]},{"year":1993,"summary":{"ru":"Demos Online и официальное подключение EUnet/Relcom к Интернету.","en":"Demos Online and the formal Internet connection of EUnet/Relcom."},"events":[{"date":{"ru":"ноябрь","en":"November"},"text":{"ru":"Начинается проект Demos Online. Первые пользователи у «Демоса» появляются в сентябре 1994 года; позднее компания становится одним из крупнейших российских провайдеров.","en":"The Demos Online project begins. Demos gets its first users in September 1994; the company later becomes one of Russia’s largest providers."},"links":[{"label":"Demos Online","url":"http://www.dol.ru/","archived":true}]},{"date":{"ru":"конец года","en":"Year end"},"text":{"ru":"Сеть EUnet/Relcom официально подключена к Интернету.","en":"The EUnet/Relcom network is officially connected to the Internet."},"links":[]}]},{"year":1994,"summary":{"ru":"Домен .RU, первые WWW-проекты, электронная библиотека, RUNNet и M9-IX.","en":"The .RU domain, early Web projects, an electronic library, RUNNet and M9-IX."},"events":[{"date":{"ru":"17 марта","en":"17 March"},"text":{"ru":"Зарегистрирован домен .RU; Горный предлагает считать эту дату началом существования российского Интернета. Запущен WWW-сервер Relcom.","en":"The .RU domain is registered; Gorny suggests treating this date as the beginning of the Russian Internet. Relcom launches a Web server."},"links":[{"label":"www.relcom.ru","url":"http://www.relcom.ru/","archived":true}]},{"date":{"ru":"4 августа","en":"4 August"},"text":{"ru":"Открывается «Московский Либертариум» Института коммерческой инженерии — проект информационной поддержки общественной деятельности и исследований либертарианства.","en":"The Moscow Libertarium opens as a project of the Institute of Commercial Engineering, initially supporting civic activity and research on libertarianism."},"links":[{"label":"Московский Либертариум","url":"http://www.libertarium.ru/","archived":true}]},{"date":{"ru":"ноябрь","en":"November"},"text":{"ru":"Появляется будущая Библиотека Мошкова — первая полнотекстовая электронная русская библиотека.","en":"The future Moshkov Library appears, described as the first full-text electronic Russian library."},"links":[{"label":"Библиотека Мошкова","url":"https://www.lib.ru/","archived":false}]},{"date":{"ru":"конец года","en":"Year end"},"text":{"ru":"Открывается Window-To-Russia — каталог русских и связанных с Россией интернет-ресурсов. В рамках программы «Университеты России» начинается создание будущей сети RUNNet.","en":"Window-To-Russia opens as a directory of Russian and Russia-related Internet resources. The future RUNNet begins under the Universities of Russia program."},"links":[{"label":"Window-To-Russia","url":"http://www.wtr.ru/","archived":true},{"label":"RUNNet","url":"http://www.runnet.ru/","archived":true}]},{"date":{"ru":"конец года","en":"Year end"},"text":{"ru":"По инициативе МГУ при поддержке крупных провайдеров создаётся M9-IX — первый в России узел обмена IP-трафиком.","en":"At Moscow State University’s initiative, with support from major providers, M9-IX is created as Russia’s first IP traffic exchange point."},"links":[]}]},{"year":1995,"summary":{"ru":"Интерактивная литература, электронные СМИ, каталоги, правовая база и массовый коммерческий доступ.","en":"Interactive literature, electronic media, directories, legal databases and mass commercial access."},"events":[{"date":{"ru":"январь","en":"January"},"text":{"ru":"Выходят первые русские книги об Интернете: руководство «Релкома» по электронной почте в MS-DOS и «Введение в WWW» Константина Окраинца.","en":"The first Russian books about the Internet appear: Relcom’s guide to e-mail in MS-DOS and Konstantin Okrainets’s Introduction to the WWW."},"links":[]},{"date":{"ru":"февраль","en":"February"},"text":{"ru":"«Буриме» Дмитрия Манина названо первой русскоязычной игрой в Интернете и первой полностью интерактивной страницей русской Сети.","en":"Dmitry Manin’s Burime is described as the first Russian-language Internet game and the first fully interactive page of the Russian Web."},"links":[{"label":"Буриме","url":"http://kulichki.com/","archived":true}]},{"date":{"ru":"конец марта","en":"Late March"},"text":{"ru":"Открывается «Жалобная книга “Буриме”» — первая русскоязычная webboard, где пользователи могут обмениваться репликами прямо на WWW-странице.","en":"The Burime Complaint Book opens, described as the first Russian-language webboard, allowing users to exchange messages directly on a Web page."},"links":[{"label":"Жалобная книга","url":"http://kulichki.com/","archived":true}]},{"date":{"ru":"март — май","en":"March–May"},"text":{"ru":"«Учительская газета» первой среди газет делает электронную версию; DeLitZyne становится первым русскоязычным электронным журналом; РосБизнесКонсалтинг первым среди российских информагентств запускает собственный сервер.","en":"Uchitelskaya Gazeta becomes the first newspaper to create an electronic edition; DeLitZyne becomes the first Russian-language electronic magazine; RBC is the first Russian news agency to launch its own server."},"links":[{"label":"Учительская газета","url":"http://www.ug.ru/","archived":false},{"label":"РосБизнесКонсалтинг","url":"http://www.rbc.ru/","archived":false}]},{"date":{"ru":"май","en":"May"},"text":{"ru":"Стартует «Комкон», предоставляющий бесплатное размещение прежде всего русскоязычным некоммерческим проектам; первым становится электронная библиотека-FTP.","en":"Komkon launches, offering free hosting primarily to Russian-language non-commercial projects; an electronic FTP library is the first."},"links":[{"label":"Комкон","url":"http://www.komkon.org/","archived":true}]},{"date":{"ru":"16 августа","en":"16 August"},"text":{"ru":"В Интернете появляется первая база данных по российскому законодательству фирмы «Инфорис», позднее laws.ru.","en":"The first online database of Russian legislation appears, created by Inforis and later known as laws.ru."},"links":[{"label":"laws.ru","url":"http://www.laws.ru/","archived":true}]},{"date":{"ru":"сентябрь","en":"September"},"text":{"ru":"«Демос» открывает каталог Russia on the Net и двуязычный онлайн-журнал CrazyWEB; «Россия-Он-Лайн» становится первым массовым коммерческим провайдером.","en":"Demos opens the Russia on the Net directory and bilingual online magazine CrazyWEB; Russia-On-Line becomes the first mass commercial provider."},"links":[{"label":"Russia on the Net","url":"http://www.ru/","archived":true},{"label":"CrazyWEB","url":"http://www.crazyweb.ru/","archived":true},{"label":"Россия-Он-Лайн","url":"http://www.online.ru/","archived":true}]},{"date":{"ru":"10 октября","en":"10 October"},"text":{"ru":"POMAH Романа Лейбова, Леонида Делицына и Дмитрия Манина назван первым интерактивным литературным проектом после «Буриме» и первым опытом сетевой прозы.","en":"POMAH by Roman Leibov, Leonid Delitsyn and Dmitry Manin is described as the first interactive literary project after Burime and the first experiment in network prose."},"links":[{"label":"POMAH","url":"http://www.cs.ut.ee/","archived":true}]},{"date":{"ru":"октябрь — декабрь","en":"October–December"},"text":{"ru":"Проект «Россия: выборы-95» публикует информацию о ходе выборов в реальном времени.","en":"The Russia: Elections ’95 project publishes election information online in real time."},"links":[{"label":"Россия: выборы-95","url":"http://www.ice.ru/","archived":true}]},{"date":{"ru":"8 / 21 ноября","en":"8 / 21 November"},"text":{"ru":"Запускаются «Анекдоты из России» Дмитрия Вернера и сервер веб-издательства «Инфоарт».","en":"Dmitry Verner’s Anecdotes from Russia and the Infoart Web publishing server are launched."},"links":[{"label":"Анекдоты из России","url":"https://www.anekdot.ru/","archived":false},{"label":"Инфоарт","url":"http://www.infoart.ru/","archived":true}]},{"date":{"ru":"конец года","en":"Year end"},"text":{"ru":"Начинается проект «Деловая сеть России». IREX запускает программу расширения доступа к Интернету: на первом этапе открываются 64 точки общего доступа в странах СНГ.","en":"Work begins on the Business Network of Russia. IREX launches its Internet access expansion program; its first stage opens 64 public access points across CIS countries."},"links":[{"label":"IREX","url":"http://www.irex.ru/","archived":true}]}]},{"year":1996,"summary":{"ru":"RBnet, интернет-кафе, сетевые журналы, реклама, поисковики и складывающееся интернет-сообщество.","en":"RBnet, Internet cafés, online magazines, advertising, search engines and a forming Internet community."},"events":[{"date":{"ru":"1996","en":"1996"},"text":{"ru":"Начинается межведомственная программа национальной сети для науки и высшей школы; позднее она получает название RBnet.","en":"An interdepartmental program begins to build a national network for science and higher education; it is later named RBnet."},"links":[]},{"date":{"ru":"18 января","en":"18 January"},"text":{"ru":"В Санкт-Петербурге открывается «Тетрис» — первое в России интернет-кафе.","en":"Tetris opens in St Petersburg, described as Russia’s first Internet café."},"links":[{"label":"Тетрис","url":"http://www.dux.ru/","archived":true}]},{"date":{"ru":"февраль","en":"February"},"text":{"ru":"Артемий Лебедев учреждает НЖМД — первую российскую награду за WWW-страницы. В Петербурге начинает выходить Internet Jornal — первый русский журнал, целиком посвящённый Интернету.","en":"Artemy Lebedev establishes NZhMD, Russia’s first award for Web pages. In St Petersburg, Internet Jornal begins as the first Russian magazine devoted entirely to the Internet."},"links":[{"label":"НЖМД","url":"http://www.tema.ru/","archived":true}]},{"date":{"ru":"март — апрель","en":"March–April"},"text":{"ru":"Появляются Human Resources Online и «Журнальный зал»; стартует программа «Университетские центры Интернет». Радио 101 открывает сайт и начинает параллельную интернет-трансляцию.","en":"Human Resources Online and Magazine Hall appear; the University Internet Centers program begins. Radio 101 opens a website and starts simultaneous Internet broadcasting."},"links":[{"label":"Human Resources Online","url":"http://www.hro.ru/","archived":true},{"label":"Журнальный зал","url":"http://magazines.russ.ru/","archived":true},{"label":"Радио 101","url":"http://www.101.ru/","archived":true}]},{"date":{"ru":"май — июнь","en":"May–June"},"text":{"ru":"Создаётся РОЦИТ. Начинает работу конкурс русской сетевой литературы «Тенета». Компания «Стек» начинает работу над Rambler.","en":"ROCIT is created. The Teneta competition for Russian network literature begins. The company Stack starts work on Rambler."},"links":[{"label":"РОЦИТ","url":"http://www.rocit.ru/","archived":false},{"label":"Тенета","url":"http://www.teneta.ru/","archived":true},{"label":"Rambler","url":"http://www.rambler.ru/","archived":false}]},{"date":{"ru":"15 июня — август","en":"15 June–August"},"text":{"ru":"Открывается «Сумасшедший Дом Мистера Паркера». Частные страницы «Симплекс» и «СовИнформБюро» первыми размещают рекламу за деньги; выборы президента освещаются через WWW Национальной службой новостей; появляется рекламная сеть Sputnik.","en":"Mr Parker’s Madhouse opens. Simplex and SovInformBuro become the first private pages to carry paid advertising; the presidential election is covered online by the National News Service; the Sputnik advertising network appears."},"links":[{"label":"Сумасшедший Дом Мистера Паркера","url":"http://www.parker.ru/","archived":true},{"label":"Национальная служба новостей","url":"http://www.nns.ru/","archived":true}]},{"date":{"ru":"9–10 сентября","en":"9–10 September"},"text":{"ru":"Открываются Cooking.ru и «Чертовы Кулички». «Кулички» становятся первым сервером, предоставляющим бесплатный хостинг русскоязычным авторским проектам.","en":"Cooking.ru and Chertovy Kulichki open. Kulichki becomes the first server to provide free hosting to Russian-language author projects."},"links":[{"label":"Cooking.ru","url":"http://www.cooking.ru/","archived":false},{"label":"Чертовы Кулички","url":"http://kulichki.com/","archived":false}]},{"date":{"ru":"2–24 октября","en":"2–24 October"},"text":{"ru":"Выходит первый номер Zhurnal.ru — «Вестника сетевой культуры». «Серебряный Дождь» начинает круглосуточное интернет-вещание; Лебедев открывает WebDesign; Zhurnal.ru проводит первую российскую онлайн-конференцию в IRC.","en":"The first issue of Zhurnal.ru, a Bulletin of Network Culture, appears. Silver Rain begins continuous Internet broadcasting; Lebedev opens WebDesign; Zhurnal.ru organizes the first Russian online conference in IRC."},"links":[{"label":"Zhurnal.ru","url":"http://www.zhurnal.ru/","archived":true},{"label":"WebDesign","url":"http://www.design.ru/","archived":true}]},{"date":{"ru":"27 октября — ноябрь","en":"27 October–November"},"text":{"ru":"В Zhurnal.ru открывается Hack Zone — площадка открытого разговора о компьютерной безопасности. Начинает выходить «Паравозов-News». CompTek представляет русифицированный поиск AltaVista с учётом морфологии.","en":"Zhurnal.ru opens Hack Zone for public discussion of computer security. Paravozov-News begins. CompTek presents a Russian-language AltaVista search adapted for morphology."},"links":[{"label":"Hack Zone","url":"http://www.zhurnal.ru/","archived":true},{"label":"CompTek","url":"http://www.comptek.ru/","archived":false}]},{"date":{"ru":"ноябрь — декабрь","en":"November–December"},"text":{"ru":"Rambler вводится в действие и быстро обходит другие русские поисковики. Представлен каталог, будущий «Ау!». Открывается первая «Кроватка»; на рынок выходит Cityline, использующий популярные контент-проекты для продвижения.","en":"Rambler goes live and quickly overtakes other Russian search engines. A directory later named Au! is presented. The first Krovatka chat site opens, and Cityline enters the market using popular content projects for promotion."},"links":[{"label":"Rambler","url":"http://www.rambler.ru/","archived":false},{"label":"Кроватка","url":"http://www.krovatka.ru/","archived":true},{"label":"Cityline","url":"http://www.cityline.ru/","archived":true}]}]},{"year":1997,"summary":{"ru":"ICQ, сетевые обозрения, виртуальные личности, рейтинги, Яndex и новые электронные издания.","en":"ICQ, Web reviews, virtual identities, rankings, Yandex and new electronic publications."},"events":[{"date":{"ru":"январь","en":"January"},"text":{"ru":"Internet Jornal превращается в «Мир Internet»; Mirabilis выпускает первую версию ICQ; открывается электронная «Компьютерра». Выходит справочник «Жёлтые страницы Internet — 1997» примерно с 1500 ресурсами.","en":"Internet Jornal becomes Mir Internet; Mirabilis releases the first version of ICQ; an electronic Computerra opens. Yellow Pages Internet — 1997 appears with descriptions of roughly 1,500 resources."},"links":[{"label":"Mirabilis / ICQ","url":"http://www.mirabilis.com/","archived":true},{"label":"Компьютерра","url":"http://www.computerra.ru/","archived":false}]},{"date":{"ru":"17 января","en":"17 January"},"text":{"ru":"В Zhurnal.ru начинают выходить «Перелётные мухи» М. И. Мухина — еженедельные обозрения Паутины, заметно повлиявшие на русскую сетевую публицистику.","en":"M. I. Mukhin’s Migratory Flies begins in Zhurnal.ru as a weekly Web review that the chronicle credits with substantial influence on Russian online journalism."},"links":[{"label":"Перелётные мухи","url":"http://www.zhurnal.ru/muxin.htm","archived":true}]},{"date":{"ru":"30 января — 4 февраля","en":"30 January–4 February"},"text":{"ru":"«Открытые системы» начинают регулярные компьютерные новости; появляется список pogoda@; Cityline запускает TrubAddUrl, позднее переименованный в «Систему TAU».","en":"Open Systems begins regular computer-news publication; the pogoda@ mailing list appears; Cityline launches TrubAddUrl, later renamed the TAU System."},"links":[{"label":"Открытые системы","url":"https://www.osp.ru/","archived":false},{"label":"Система TAU","url":"http://www.design.ru/","archived":true}]},{"date":{"ru":"17 февраля","en":"17 February"},"text":{"ru":"Разоблачение Кати Деткиной становится первым громким скандалом русской Сети и вызывает дискуссии об авторстве, анонимности, виртуальности, этике, свободе и ответственности.","en":"The exposure of Katya Detkina becomes the first major scandal of the Russian Web and triggers debate about authorship, anonymity, virtual identity, ethics, freedom and responsibility."},"links":[{"label":"CrazyWeb","url":"http://www.crazyweb.ru/","archived":true}]},{"date":{"ru":"3–9 марта","en":"3–9 March"},"text":{"ru":"Открывается литературный журнал «Словесность» — будущая «Сетевая словесность». Появляется новая версия «Онейрократии», где сны можно записывать через онлайн-форму.","en":"The literary journal Slovesnost opens, later becoming Setevaya Slovesnost. A new version of Oneirocracy appears, allowing dreams to be submitted through an online form."},"links":[{"label":"Сетевая словесность","url":"https://www.netslova.ru/","archived":false},{"label":"Онейрократия","url":"http://www.cityline.ru/","archived":true}]},{"date":{"ru":"16–24 марта","en":"16–24 March"},"text":{"ru":"Проходит первый Российский Интернет Форум; начинается «Еже-движение»; запускается Rambler’s Top 100 со счётчиками посещений и рейтингом сайтов.","en":"The first Russian Internet Forum takes place; the Ezhe movement begins; Rambler’s Top 100 launches with visitor counters and site rankings."},"links":[{"label":"Российский Интернет Форум","url":"http://www.rif.ru/","archived":false},{"label":"Еже-движение","url":"http://www.ezhe.ru/","archived":true},{"label":"Rambler’s Top 100","url":"http://www.rambler.ru/","archived":false}]},{"date":{"ru":"май — июнь","en":"May–June"},"text":{"ru":"Начинают выходить End of The World News и «Русские кружева». NetSkate выпускает «Русскую новостную дорожку»; появляется русское зеркало ClickZ — специализированное издание об интернет-рекламе.","en":"End of The World News and Russian Lace begin. NetSkate releases the Russian News Ticker; a Russian mirror of ClickZ appears as a specialized publication about Internet advertising."},"links":[{"label":"End of The World News","url":"http://imperium.lenin.ru/","archived":true},{"label":"ClickZ","url":"http://www.zhurnal.ru/","archived":true}]},{"date":{"ru":"14–15 июля","en":"14–15 July"},"text":{"ru":"Открывается «Русский Журнал» — первый интернет-проект Фонда эффективной политики. «Инфоарт» объявляет о создании первых официально зарегистрированных русскоязычных push-каналов.","en":"Russky Zhurnal opens as the first Internet project of the Foundation for Effective Politics. Infoart announces the first officially registered Russian-language push channels."},"links":[{"label":"Русский Журнал","url":"http://russ.ru/","archived":true},{"label":"Инфоарт","url":"http://www.infoart.ru/","archived":true}]},{"date":{"ru":"август — сентябрь","en":"August–September"},"text":{"ru":"Выходит журнал Internet; запускается баннерная сеть Reklama.ru. 23 сентября официально открывается Яndex.ru с поиском, учитывающим морфологию русского языка.","en":"The magazine Internet appears; the Reklama.ru banner network launches. On 23 September Yandex.ru officially opens with search that accounts for Russian morphology."},"links":[{"label":"Reklama.ru","url":"http://www.reklama.ru/","archived":true},{"label":"Яndex","url":"http://www.yandex.ru/","archived":false}]},{"date":{"ru":"27 сентября — ноябрь","en":"27 September–November"},"text":{"ru":"Появляется интерактивная литературная игра «Сад расходящихся хокку». После взлома Rambler Top 100 система вводит более развёрнутые категории. В «Доме Мистера Паркера» открывается проект «Летопись» для сохранения цитат русской Сети.","en":"The interactive literary game Garden of Forking Haiku appears. After Rambler Top 100 is hacked, the ranking introduces more detailed categories. Mr Parker’s site launches a Chronicle project preserving quotations from the Russian Web."},"links":[{"label":"Сад расходящихся хокку","url":"https://hokku.netslova.ru/","archived":false},{"label":"Rambler","url":"http://www.rambler.ru/","archived":false}]}]},{"year":1998,"summary":{"ru":"Сетевое искусство, политический Интернет, интернет-радио, СОРМ-2, кризис и рост аудитории.","en":"Net art, political Internet, Internet radio, SORM-2, the financial crisis and audience growth."},"events":[{"date":{"ru":"5–20 января","en":"5–20 January"},"text":{"ru":"Начинает выходить «Бессрочная ссылка» Романа Лейбова. Тимофей Бокарев открывает Tim Promotion, позднее Promo.Ru; появляется каталог PSyberLink по психологии и социальным наукам.","en":"Roman Leibov’s Bessrochnaya Ssylka begins. Timofey Bokarev opens Tim Promotion, later Promo.Ru; the PSyberLink directory for psychology and the social sciences appears."},"links":[{"label":"Бессрочная ссылка","url":"http://old.russ.ru/","archived":true},{"label":"Promo.Ru","url":"http://www.promo.ru/","archived":false}]},{"date":{"ru":"18 февраля","en":"18 February"},"text":{"ru":"В Zhurnal.ru открывается «Полит.ру» — ежедневные политические новости под редакцией Андрея Левкина.","en":"Polit.ru opens within Zhurnal.ru as a daily political-news project edited by Andrey Levkin."},"links":[{"label":"Полит.ру","url":"http://www.polit.ru/","archived":false}]},{"date":{"ru":"16–31 марта","en":"16–31 March"},"text":{"ru":"Открываются официальный и неформальный сайты Бориса Немцова — ранний опыт «политического Интернета». Происходит первая интернет-перепалка действующих российских политиков.","en":"Official and informal Boris Nemtsov sites open as an early experiment in the “political Internet.” The first online clash between serving Russian politicians follows."},"links":[{"label":"официальный сайт Немцова","url":"http://www.nemtsov.ru/","archived":true},{"label":"форум Glasnet","url":"http://www.glasnet.ru/","archived":true}]},{"date":{"ru":"март — апрель","en":"March–April"},"text":{"ru":"Подводятся итоги первого фестиваля арт-ресурсов «Да-да-нет». В Русском Журнале появляются «Net-культура» и «Сетевая жизнь»; Zhurnal.ru открывает рубрику Net Art Алексея Шульгина; запускается VRML-проект «Виртуальный Мавзолей Ленина».","en":"The first Da-Da-Net festival of art resources announces its results. Russky Zhurnal opens Net Culture and Network Life; Zhurnal.ru launches Alexei Shulgin’s Net Art section; the VRML project Virtual Lenin Mausoleum opens."},"links":[{"label":"Да-да-нет","url":"http://www.da-da-net.ru/","archived":true},{"label":"Net-культура","url":"http://old.russ.ru/","archived":true},{"label":"Net Art","url":"http://www.zhurnal.ru/","archived":true},{"label":"Виртуальный Мавзолей Ленина","url":"http://www.lenin.ru/","archived":true}]},{"date":{"ru":"апрель — май","en":"April–May"},"text":{"ru":"Радио 101 расширяет интернет-вещание; появляется RadioNet — первая в России радиопрограмма только для Интернета. Борис Ельцин участвует в интернет-пресс-конференции на #msnbc.","en":"Radio 101 expands its Internet broadcasting; RadioNet appears as Russia’s first radio program made only for the Internet. Boris Yeltsin takes part in an Internet press conference on #msnbc."},"links":[{"label":"Радио 101","url":"http://www.101.ru/","archived":true}]},{"date":{"ru":"23–28 июня","en":"23–28 June"},"text":{"ru":"Проходит первая российская конференция по интернет-маркетингу. «Московский Либертариум» открывает раздел о СОРМ-2, выводя проблему сетевого наблюдения в публичное обсуждение.","en":"Russia’s first conference on Internet marketing takes place. Moscow Libertarium opens a section on SORM-2, bringing network surveillance into public discussion."},"links":[{"label":"Московский Либертариум","url":"http://www.ice.ru/","archived":true}]},{"date":{"ru":"июнь","en":"June"},"text":{"ru":"Исследование IDC оценивает число пользователей российского Интернета в 1,2 млн человек; для сравнения летопись приводит 384 тыс. в 1996 году.","en":"An IDC study estimates the Russian Internet audience at 1.2 million users; the chronicle compares this with 384,000 in 1996."},"links":[]},{"date":{"ru":"17 августа","en":"17 August"},"text":{"ru":"Финансовый кризис резко увеличивает спрос на финансово-политическую информацию. РБК становится главным источником такого трафика и несколько раз расширяет канал.","en":"The financial crisis sharply increases demand for financial and political information. RBC becomes the leading source for this traffic and repeatedly expands its connection capacity."},"links":[{"label":"РБК","url":"http://www.rbc.ru/","archived":false}]},{"date":{"ru":"август — октябрь","en":"August–October"},"text":{"ru":"Открывается сервер «Современное искусство в Сети»; Фонд «Евразия» поддерживает 14 русскоязычных интернет-проектов; запускается «Кирилл и Мефодий: Знания обо всём».","en":"The Contemporary Art on the Web server opens; the Eurasia Foundation funds 14 Russian-language Internet projects; Kirill & Mefodiy: Knowledge About Everything launches."},"links":[{"label":"Современное искусство в Сети","url":"http://www.guelman.ru/","archived":true},{"label":"Кирилл и Мефодий","url":"http://www.km.ru/","archived":false}]},{"date":{"ru":"1 ноября","en":"1 November"},"text":{"ru":"Открывается бесплатная почтовая служба Mail.ru. Последующую продажу 20% Port.ru иностранным инвесторам Горный называет первой крупной сделкой в российском Интернете.","en":"The free Mail.ru service opens. Gorny describes the later sale of 20% of Port.ru to foreign investors as the first major deal in the Russian Internet."},"links":[{"label":"Mail.ru","url":"http://www.mail.ru/","archived":false}]},{"date":{"ru":"27 ноября","en":"27 November"},"text":{"ru":"На бесплатном сервере people.weekend.ru появляется «Коготь» — собрание компрометирующих материалов. Горный называет его первым примером использования Сети для «слива компромата»; уже на следующий день сайт закрывают, но копии расходятся по другим серверам.","en":"Kogot appears on the free people.weekend.ru server as a collection of compromising materials. Gorny calls it the first example of using the Web to leak kompromat; the site is closed the next day, but copies spread to other servers."},"links":[{"label":"Коготь","url":"http://people.weekend.ru/","archived":true}]},{"date":{"ru":"декабрь","en":"December"},"text":{"ru":"По отчёту РОЦИТ число российских пользователей Интернета к концу года составляет около 1,5 млн; действует более 300 провайдеров и создано свыше 26 тысяч информационных ресурсов.","en":"According to a ROCIT report, Russia has about 1.5 million Internet users by year’s end, more than 300 providers and over 26,000 information resources."},"links":[{"label":"РОЦИТ","url":"http://www.rocit.ru/","archived":true}]}]},{"year":1999,"summary":{"ru":"Ежедневные онлайн-медиа, политические проекты, авторское право, статистика и превращение Рунета в массовое информационное пространство.","en":"Daily online media, political projects, copyright, metrics and the transformation of Runet into a mass information space."},"events":[{"date":{"ru":"22–27 января","en":"22–27 January"},"text":{"ru":"Яndex вводит еженедельный НИНИ-индекс изменений пользовательских интересов. Выходит первый выпуск «Правды-Интернет», будущей «Правды.ру».","en":"Yandex introduces the weekly NINI index tracking changes in user interests. The first issue of Pravda-Internet, later Pravda.ru, appears."},"links":[{"label":"Яndex","url":"http://www.yandex.ru/","archived":false},{"label":"Правда.ру","url":"http://www.pravda.ru/","archived":false}]},{"date":{"ru":"1–18 февраля","en":"1–18 February"},"text":{"ru":"В Петербурге проходит конференция «Интернет. Общество. Личность». Открывается «Интернет-парламент» Сергея Кириенко и ФЭП; публикуется анонимный компроматный сайт «Коготь-2».","en":"St Petersburg hosts the Internet. Society. Personality conference. Sergey Kiriyenko and the Foundation for Effective Politics open the Internet Parliament; the anonymous kompromat site Kogot-2 appears."},"links":[{"label":"Интернет-парламент","url":"http://www.elections.ru/","archived":true},{"label":"Коготь-2","url":"http://www.krasnobykow.com/","archived":true}]},{"date":{"ru":"1–13 марта","en":"1–13 March"},"text":{"ru":"Выходит первая российская ежедневная интернет-газета Gazeta.ru: главный редактор Антон Носик, дизайн Артемия Лебедева, программирование Максима Мошкова. Вслед за ложной новостью о смерти губернатора Петербурга обсуждается Интернет как среда дезинформации; проходит третий РИФ.","en":"Gazeta.ru launches as Russia’s first daily Internet newspaper, edited by Anton Nosik, designed by Artemy Lebedev and programmed by Maxim Moshkov. A false report about the St Petersburg governor fuels debate about online disinformation; the third RIF takes place."},"links":[{"label":"архив Gazeta.ru","url":"http://www.gazeta.msk.ru/","archived":true},{"label":"РИФ","url":"http://www.rif.ru/","archived":false}]},{"date":{"ru":"март","en":"March"},"text":{"ru":"Тема сетевой элиты становится предметом рейтингов и проектов: журнал Internet публикует «108 лучших русской Сети», а Горный и Шерман открывают «Инфократию».","en":"The idea of a network elite becomes the subject of rankings and projects: Internet magazine publishes “108 Best of the Russian Web,” while Gorny and Sherman launch Infocracy."},"links":[{"label":"Инфократия","url":"http://www.guelman.ru/","archived":true}]},{"date":{"ru":"апрель — май","en":"April–May"},"text":{"ru":"ФЭП использует сайт «Мы — за Барака!» как инструмент предвыборной агитации в Израиле. Студия Артемия Лебедева запускает баннерную сеть RB2, быстро достигшую миллиона показов в сутки.","en":"The Foundation for Effective Politics uses the We Are for Barak! site as an election-campaign tool in Israel. Artemy Lebedev Studio launches the RB2 banner network, quickly reaching one million impressions per day."},"links":[{"label":"Студия Артемия Лебедева","url":"http://www.design.ru/","archived":true}]},{"date":{"ru":"май — июнь","en":"May–June"},"text":{"ru":"Подводятся итоги «Да-Да-Net’99» и фестиваля Trash Art. Каталог «Ау!» запускает бесплатную почту Au.ru и вскоре становится @Rus. Статья «Трест Рунет» провоцирует спор о контроле влиятельных сетевых СМИ финансовыми группами.","en":"Da-Da-Net ’99 and the Trash Art festival announce their results. The Au! directory launches free e-mail and soon becomes @Rus. The article Runet Trust triggers debate about financial groups controlling influential online media."},"links":[{"label":"Да-Да-Net’99","url":"http://www.da-da-net.ru/","archived":true},{"label":"@Rus","url":"http://www.atrus.ru/","archived":true}]},{"date":{"ru":"15–28 июля","en":"15–28 July"},"text":{"ru":"После публикации Gazeta.ru сведения об эпидемии в Ростовской области подхватывают ведущие СМИ — один из ранних случаев, когда сетевой ресурс становится исходным источником новости. Скандал вокруг «Голубого сала» Владимира Сорокина перерастает в дискуссию об авторском праве в Интернете.","en":"After Gazeta.ru reports an epidemic in the Rostov region, leading media follow — an early case of an online resource becoming the original source of a story. The dispute over Vladimir Sorokin’s Blue Lard expands into a debate about Internet copyright."},"links":[]},{"date":{"ru":"28 июля","en":"28 July"},"text":{"ru":"Открывается сайт Информационно-поисковой службы уголовного розыска Санкт-Петербурга — для поиска пропавших без вести, преступников и опознания неопознанных тел.","en":"The St Petersburg Criminal Investigation Department opens an information-search website for missing persons, wanted criminals and identification of unknown bodies."},"links":[{"label":"Уголовный розыск Санкт-Петербурга","url":"http://www.ugro.spb.ru/","archived":true}]},{"date":{"ru":"19 августа — 4 сентября","en":"19 August–4 September"},"text":{"ru":"Яndex вводит «семейный» поиск. «Независимая газета» начинает полностью публиковать материалы в свободном доступе. Проходит награждение «Тенета-Ринет’98», запускается круглосуточная Lenta.ru.","en":"Yandex introduces family search. Nezavisimaya Gazeta begins publishing its full contents freely online. The Teneta-Rinet ’98 awards are held and the round-the-clock Lenta.ru launches."},"links":[{"label":"семейный поиск","url":"http://family.yandex.ru/","archived":true},{"label":"Независимая газета","url":"http://www.ng.ru/","archived":false},{"label":"Тенета","url":"http://www.teneta.ru/","archived":true},{"label":"Lenta.ru","url":"http://www.lenta.ru/","archived":false}]},{"date":{"ru":"сентябрь","en":"September"},"text":{"ru":"Открывается Monitoring.ru для регулярных исследований российской web-аудитории. Появляются «Утро» и Союз операторов Интернет.","en":"Monitoring.ru opens for regular studies of the Russian Web audience. Utro and the Union of Internet Operators also appear."},"links":[{"label":"Monitoring.ru","url":"http://www.monitoring.ru/","archived":true},{"label":"Утро","url":"http://www.utro.ru/","archived":false}]},{"date":{"ru":"октябрь","en":"October"},"text":{"ru":"Открываются СМИ.Ру и Vesti.ru. Завершается программа «Университетские центры Интернет»: создано 33 университетских центра с выходом в Интернет.","en":"SMI.ru and Vesti.ru open. The University Internet Centers program concludes after creating Internet-equipped centers at 33 Russian universities."},"links":[{"label":"СМИ.Ру","url":"http://www.smi.ru/","archived":true},{"label":"Vesti.ru","url":"http://www.vesti.ru/","archived":false}]},{"date":{"ru":"9–29 ноября","en":"9–29 November"},"text":{"ru":"«Интернить’99» становится площадкой разговора интернет-сообщества с правительством. Начинают выходить Internet.ru и eMedia; открывается SpyLOG — система интернет-статистики.","en":"Internit ’99 becomes a venue for dialogue between the Internet community and government. Internet.ru and eMedia begin publishing; SpyLOG opens as an Internet statistics service."},"links":[{"label":"Internet.ru","url":"http://internet.ru/","archived":true},{"label":"eMedia","url":"http://www.emedia.ru/","archived":true},{"label":"SpyLOG","url":"http://spylog.ru/","archived":true}]},{"date":{"ru":"ноябрь — декабрь","en":"November–December"},"text":{"ru":"Monitoring.ru оценивает аудиторию российского Интернета примерно в 5,4 млн человек, около 5% взрослого населения; более 40% начали пользоваться Сетью в этом году. Создаются Российская Академия Интернет и Русская виртуальная библиотека.","en":"Monitoring.ru estimates the Russian Internet audience at about 5.4 million people, around 5% of the adult population; more than 40% began using the Internet that year. The Russian Academy of the Internet and the Russian Virtual Library are created."},"links":[{"label":"Русская виртуальная библиотека","url":"http://www.rvb.ru/","archived":false}]},{"date":{"ru":"декабрь","en":"December"},"text":{"ru":"Открывается Internet Media House Russia; выигран первый судебный иск о плагиате из Интернета. В день выборов сайт Elections99.com публикует exit polls и становится одним из самых заметных проектов политического Рунета.","en":"Internet Media House Russia opens; the first court case over plagiarism from the Internet is won. On election day Elections99.com publishes exit polls and becomes one of the most prominent projects of political Runet."},"links":[{"label":"Elections99.com","url":"http://www.elections99.com/","archived":true}]},{"date":{"ru":"19–29 декабря","en":"19–29 December"},"text":{"ru":"Elections99.com публикует exit polls в день думских выборов и становится одним из самых громких проектов политического Рунета. В конце месяца Владимир Путин встречается с представителями интернет-сообщества, а РосНИИРОС объявляет о снижении цены регистрации домена.","en":"Elections99.com publishes exit polls on parliamentary election day and becomes one of the loudest projects of political Runet. At month’s end Vladimir Putin meets representatives of the Internet community, while RosNIIROS announces a cut in domain-registration fees."},"links":[{"label":"Elections99.com","url":"http://www.elections99.com/","archived":true},{"label":"РосНИИРОС","url":"http://www.ripn.net/","archived":true}]}]}];
-const state={lang:"ru",current:0};
+const DATA=[{"year":1990,"summary":{"ru":"Гласнет, Релком, UUCP и домен .SU.","en":"Glasnet, Relcom, UUCP and the .SU domain."},"events":[{"date":{"ru":"январь","en":"January"},"text":{"ru":"Создана общественная организация «Гласнет». При поддержке Association for Progressive Communications она обеспечивала сетевой связью учителей, правозащитников, экологов и другие общественные группы; в 1990 году около 50 пользователей обслуживали три модемные линии.","en":"The public organization Glasnet is created. With support from the Association for Progressive Communications, it provides network access to teachers, human-rights activists, environmentalists and other civic groups; in 1990 about 50 users are served by three modem lines."},"links":[{"label":"Association for Progressive Communications","url":"https://www.apc.org/","archived":false}]},{"date":{"ru":"август","en":"August"},"text":{"ru":"Основана сеть «Релком» — название образовано от RELiable COMmunications. В её создании участвовали специалисты кооператива «Демос», многие из Курчатовского института. К концу года подключены около 30 организаций.","en":"Relcom is founded — its name comes from RELiable COMmunications. Specialists from the Demos cooperative, many from the Kurchatov Institute, take part in its creation. By year’s end about 30 organizations are connected."},"links":[{"label":"Релком","url":"http://www.relcom.ru/","archived":true}]},{"date":{"ru":"1990","en":"1990"},"text":{"ru":"Сеть работает на электронной почте UUCP: почта передаётся между узлами по модему во время сеансов связи, при этом возможна переписка на русском языке.","en":"The network is based on UUCP e-mail: mail is transferred between nodes by modem during connection sessions, with Russian-language correspondence supported."},"links":[]},{"date":{"ru":"28 августа","en":"28 August"},"text":{"ru":"Проведён первый сеанс телекоммуникационной связи с Финляндией по международному телефону. Горный отмечает, что по другим источникам аналогичное событие относят к июлю 1989 года.","en":"The first telecommunications session with Finland is carried out over an international telephone line. Gorny notes that other sources date a comparable event to July 1989."},"links":[]},{"date":{"ru":"19 сентября","en":"19 September"},"text":{"ru":"В базе InterNIC зарегистрирован домен верхнего уровня .SU.","en":"The .SU top-level domain is registered in the InterNIC database."},"links":[]}]},{"year":1991,"summary":{"ru":"TCP/IP, внутренний трафик, C-News и первые русскоязычные непрограммистские телеконференции.","en":"TCP/IP, domestic traffic, C-News and the first Russian-language non-programmer newsgroups."},"events":[{"date":{"ru":"февраль","en":"February"},"text":{"ru":"«Релком» организует первое в России модемное соединение Москва—Барнаул на скорости 9600 бод с использованием TCP/IP.","en":"Relcom establishes what the chronicle calls Russia’s first Moscow–Barnaul modem connection at 9600 baud using TCP/IP."},"links":[{"label":"Релком","url":"http://www.relcom.ru/","archived":true}]},{"date":{"ru":"1 мая","en":"1 May"},"text":{"ru":"Объём информации, пересылаемой внутри России, становится больше объёма обмена с Западом. В летописи этот момент сформулирован как превращение сети в «реально российскую».","en":"Traffic exchanged inside Russia exceeds traffic going to and from the West. The chronicle marks this as the point at which the network becomes effectively Russian."},"links":[]},{"date":{"ru":"июль","en":"July"},"text":{"ru":"«Релком» участвует в Internet Society и начинает использовать выделенный канал Москва—Таллин—Хельсинки.","en":"Relcom participates in the Internet Society and begins using a dedicated Moscow–Tallinn–Helsinki link."},"links":[{"label":"Internet Society","url":"https://www.internetsociety.org/","archived":false}]},{"date":{"ru":"1991","en":"1991"},"text":{"ru":"Осваивается C-News — межузловое распространение материалов телеконференций — и вводится первая версия почтового сервера телеконференций.","en":"C-News is adopted for inter-node distribution of newsgroup material, and the first version of an e-mail-based conference server is introduced."},"links":[]},{"date":{"ru":"конец года","en":"Year end"},"text":{"ru":"В «Релкоме» представлены крупные города России, некоторые страны СНГ и Балтии.","en":"Relcom now includes major Russian cities as well as locations in some CIS and Baltic countries."},"links":[]},{"date":{"ru":"конец года","en":"Year end"},"text":{"ru":"Институт коммерческой инженерии начинает проект «ИнфоРынок». relcom.infomarket.talk и relcom.infomarket.quote названы первыми российскими русскоязычными телеконференциями, рассчитанными не на программистов.","en":"The Institute of Commercial Engineering starts InfoMarket. relcom.infomarket.talk and relcom.infomarket.quote are described as the first Russian-language Russian newsgroups aimed beyond programmers."},"links":[]}]},{"year":1992,"summary":{"ru":"EUnet/Relcom, on-line IP, RELARN, FTP-архивы и первые русские серверы за рубежом.","en":"EUnet/Relcom, online IP, RELARN, FTP archives and early Russian servers abroad."},"events":[{"date":{"ru":"июль","en":"July"},"text":{"ru":"«Релком» официально регистрируется в панъевропейской EUnet как EUnet/Relcom; в летописи сеть названа крупнейшей на европейском континенте. Создано АО «Релком».","en":"Relcom is officially registered in the pan-European EUnet as EUnet/Relcom; the chronicle describes it as the largest network on the European continent. Relcom becomes a joint-stock company."},"links":[{"label":"EUnet/Relcom","url":"http://www.relcom.eu.net/History/","archived":true}]},{"date":{"ru":"середина года","en":"Mid-year"},"text":{"ru":"АО «Релком» начинает экспериментальное внедрение on-line IP, позволяющего работать в реальном времени и использовать сервисы помимо электронной почты.","en":"Relcom begins experimental deployment of online IP, enabling real-time connectivity and services beyond e-mail."},"links":[]},{"date":{"ru":"середина года","en":"Mid-year"},"text":{"ru":"Начинается создание научной некоммерческой сети RELARN. Новый канал на Запад через Амстердам примерно в четыре раза увеличивает пропускную способность.","en":"Work begins on the non-commercial academic network RELARN. A new western link through Amsterdam increases bandwidth by roughly four times."},"links":[{"label":"RELARN","url":"https://web.archive.org/web/19990209124612/http://www.ripn.net/relarn/","archived":true,"direct":true}]},{"date":{"ru":"1992","en":"1992"},"text":{"ru":"Сергей Наумов создаёт в США «Внуков Даждьбога» — сначала FTP-архив материалов о русском язычестве, с весны 1993 года переведённый на WWW.","en":"Sergey Naumov creates Grandchildren of Dazhdbog in the US — initially an FTP archive about Russian paganism, moved to the Web in spring 1993."},"links":[{"label":"Внуки Даждьбога","url":"https://www.ibiblio.org/sergei/Grandsons.html","archived":true,"direct":true}]},{"date":{"ru":"сентябрь","en":"September"},"text":{"ru":"Вадим Маслов открывает в США «СовИнформБюро» — первый, по летописи, целиком русский сервер за границей; сначала FTP-архив, с лета 1993 года — WWW.","en":"Vadim Maslov opens SovInformBuro in the US, described as the first entirely Russian server abroad; first an FTP archive, then on the Web from summer 1993."},"links":[{"label":"СовИнформБюро","url":"http://www.kovrik.com/sib/","archived":true,"direct":true}]},{"date":{"ru":"октябрь","en":"October"},"text":{"ru":"Впервые организуется оперативное распространение по сети электронных версий «Известий» и некоторых других российских периодических изданий.","en":"Electronic versions of Izvestia and several other Russian periodicals begin to be distributed rapidly over the network."},"links":[]},{"date":{"ru":"октябрь","en":"October"},"text":{"ru":"Евгений Пескин основывает Eugene’s Electronic Library — FTP-архив свободно распространяемой литературы; в 1994 году проект переходит на WWW и русскоязычные тексты.","en":"Evgeny Peskin founds Eugene’s Electronic Library, an FTP archive of freely distributed literature; in 1994 it moves to the Web and Russian-language texts."},"links":[{"label":"Eugene’s Electronic Library","url":"https://web.archive.org/web/19970318143950/http://www.online.ru/sp/eel/russian/","archived":true,"direct":true}]}]},{"year":1993,"summary":{"ru":"Demos Online и официальное подключение EUnet/Relcom к Интернету.","en":"Demos Online and the formal Internet connection of EUnet/Relcom."},"events":[{"date":{"ru":"ноябрь","en":"November"},"text":{"ru":"Начинается проект Demos Online. Первые пользователи у «Демоса» появляются в сентябре 1994 года; позднее компания становится одним из крупнейших российских провайдеров.","en":"The Demos Online project begins. Demos gets its first users in September 1994; the company later becomes one of Russia’s largest providers."},"links":[{"label":"Demos Online","url":"http://www.dol.ru/","archived":true}]},{"date":{"ru":"конец года","en":"Year end"},"text":{"ru":"Сеть EUnet/Relcom официально подключена к Интернету.","en":"The EUnet/Relcom network is officially connected to the Internet."},"links":[]}]},{"year":1994,"summary":{"ru":"Домен .RU, первые WWW-проекты, электронная библиотека, RUNNet и M9-IX.","en":"The .RU domain, early Web projects, an electronic library, RUNNet and M9-IX."},"events":[{"date":{"ru":"17 марта","en":"17 March"},"text":{"ru":"Зарегистрирован домен .RU; Горный предлагает считать эту дату началом существования российского Интернета. Запущен WWW-сервер Relcom.","en":"The .RU domain is registered; Gorny suggests treating this date as the beginning of the Russian Internet. Relcom launches a Web server."},"links":[{"label":"www.relcom.ru","url":"http://www.relcom.ru/","archived":true}]},{"date":{"ru":"4 августа","en":"4 August"},"text":{"ru":"Открывается «Московский Либертариум» Института коммерческой инженерии — проект информационной поддержки общественной деятельности и исследований либертарианства.","en":"The Moscow Libertarium opens as a project of the Institute of Commercial Engineering, initially supporting civic activity and research on libertarianism."},"links":[{"label":"Либертариум","url":"https://libertarium.ru/index.html","archived":true,"direct":true}]},{"date":{"ru":"ноябрь","en":"November"},"text":{"ru":"Появляется будущая Библиотека Мошкова — первая полнотекстовая электронная русская библиотека.","en":"The future Moshkov Library appears, described as the first full-text electronic Russian library."},"links":[{"label":"Библиотека Мошкова","url":"https://www.lib.ru/","archived":false,"direct":true}]},{"date":{"ru":"конец года","en":"Year end"},"text":{"ru":"Открывается Window-To-Russia — каталог русских и связанных с Россией интернет-ресурсов. В рамках программы «Университеты России» начинается создание будущей сети RUNNet.","en":"Window-To-Russia opens as a directory of Russian and Russia-related Internet resources. The future RUNNet begins under the Universities of Russia program."},"links":[{"label":"Window-To-Russia","url":"http://www.wtr.ru/","archived":true},{"label":"RUNNet","url":"http://www.runnet.ru/","archived":true}]},{"date":{"ru":"конец года","en":"Year end"},"text":{"ru":"По инициативе МГУ при поддержке крупных провайдеров создаётся M9-IX — первый в России узел обмена IP-трафиком.","en":"At Moscow State University’s initiative, with support from major providers, M9-IX is created as Russia’s first IP traffic exchange point."},"links":[]}]},{"year":1995,"summary":{"ru":"Интерактивная литература, электронные СМИ, каталоги, правовая база и массовый коммерческий доступ.","en":"Interactive literature, electronic media, directories, legal databases and mass commercial access."},"events":[{"date":{"ru":"январь","en":"January"},"text":{"ru":"Выходят первые русские книги об Интернете: руководство «Релкома» по электронной почте в MS-DOS и «Введение в WWW» Константина Окраинца.","en":"The first Russian books about the Internet appear: Relcom’s guide to e-mail in MS-DOS and Konstantin Okrainets’s Introduction to the WWW."},"links":[]},{"date":{"ru":"февраль","en":"February"},"text":{"ru":"«Буриме» Дмитрия Манина названо первой русскоязычной игрой в Интернете и первой полностью интерактивной страницей русской Сети.","en":"Dmitry Manin’s Burime is described as the first Russian-language Internet game and the first fully interactive page of the Russian Web."},"links":[{"label":"Буриме","url":"http://centrolit.kulichki.net/centrolit/cgi/br.cgi","archived":true,"direct":true}]},{"date":{"ru":"конец марта","en":"Late March"},"text":{"ru":"Открывается «Жалобная книга “Буриме”» — первая русскоязычная webboard, где пользователи могут обмениваться репликами прямо на WWW-странице.","en":"The Burime Complaint Book opens, described as the first Russian-language webboard, allowing users to exchange messages directly on a Web page."},"links":[{"label":"Жалобная книга «Буриме»","url":"http://centrolit.kulichki.net/centrolit/cgi/br_kzhp.cgi","archived":true,"direct":true}]},{"date":{"ru":"март — май","en":"March–May"},"text":{"ru":"«Учительская газета» первой среди газет делает электронную версию; DeLitZyne становится первым русскоязычным электронным журналом; РосБизнесКонсалтинг первым среди российских информагентств запускает собственный сервер.","en":"Uchitelskaya Gazeta becomes the first newspaper to create an electronic edition; DeLitZyne becomes the first Russian-language electronic magazine; RBC is the first Russian news agency to launch its own server."},"links":[{"label":"Учительская газета","url":"http://www.ug.ru/","archived":false},{"label":"РосБизнесКонсалтинг","url":"http://www.rbc.ru/","archived":false}]},{"date":{"ru":"май","en":"May"},"text":{"ru":"«Комкон» начинает бесплатно размещать русскоязычные некоммерческие проекты. Среди известных размещённых там ресурсов — «Бард-Кафе», Ukraine.org, проекты об эмуляции Emul8 и Emulation.net, фотогалерея PUG (Pentax Users Gallery), ArtPalace и различные персональные проекты.","en":"Komkon begins free hosting for Russian-language non-commercial projects. Well-known hosted resources include Bard-Cafe, Ukraine.org, the emulation projects Emul8 and Emulation.net, PUG (Pentax Users Gallery), ArtPalace, and various personal projects."},"links":[{"label":"Комкон","url":"http://www.komkon.org/"},{"label":"Бард-Кафе","url":"http://bard-cafe.komkon.org/"},{"label":"Ukraine.org","url":"http://ukraine.org/"},{"label":"Emul8","url":"https://www.komkon.org/EMUL8/","direct":true},{"label":"Emulation.net","url":"http://emulation.net/"},{"label":"PUG","url":"http://pug.komkon.org/"},{"label":"ArtPalace","url":"http://www.artpalace.com/"}]},{"date":{"ru":"16 августа","en":"16 August"},"text":{"ru":"В Интернете появляется первая база данных по российскому законодательству фирмы «Инфорис», позднее laws.ru.","en":"The first online database of Russian legislation appears, created by Inforis and later known as laws.ru."},"links":[{"label":"laws.ru","url":"http://www.laws.ru/","archived":true}]},{"date":{"ru":"сентябрь","en":"September"},"text":{"ru":"«Демос» открывает каталог Russia on the Net и двуязычный онлайн-журнал CrazyWEB; «Россия-Он-Лайн» становится первым массовым коммерческим провайдером.","en":"Demos opens the Russia on the Net directory and bilingual online magazine CrazyWEB; Russia-On-Line becomes the first mass commercial provider."},"links":[{"label":"Russia on the Net","url":"http://www.ru/","archived":true},{"label":"CrazyWEB","url":"http://www.crazyweb.ru/","archived":true},{"label":"Россия-Он-Лайн","url":"http://www.online.ru/","archived":true}]},{"date":{"ru":"октябрь","en":"October"},"text":{"ru":"Алекс Фарбер (Германия) создаёт каталог «Русская литература в Интернете» — систематизированный перечень литературных ресурсов и прессы. В начале 1997 года каталог переносится на сервер в Россию.","en":"Alex Farber (Germany) creates the Russian Literature on the Internet catalogue, a systematic directory of literary resources and press. In early 1997 it moves to a server in Russia."},"links":[{"label":"сервер в Россию","url":"http://www.simplex.ru/"},{"label":"источник 19","url":"https://www.netslova.ru/gorny/rulet/sources.html#19","direct":true},{"label":"источник 26","url":"https://www.netslova.ru/gorny/rulet/sources.html#26","direct":true}]},{"date":{"ru":"10 октября","en":"10 October"},"text":{"ru":"POMAH Романа Лейбова, Леонида Делицына и Дмитрия Манина назван первым интерактивным литературным проектом после «Буриме» и первым опытом сетевой прозы.","en":"POMAH by Roman Leibov, Leonid Delitsyn and Dmitry Manin is described as the first interactive literary project after Burime and the first experiment in network prose."},"links":[{"label":"POMAH","url":"https://web.archive.org/web/19970804145904/http://www.cs.ut.ee/~roman_l/hyperfiction/index.html","archived":true,"direct":true}]},{"date":{"ru":"октябрь — декабрь","en":"October–December"},"text":{"ru":"Проект «Россия: выборы-95» публикует информацию о ходе выборов в реальном времени.","en":"The Russia: Elections ’95 project publishes election information online in real time."},"links":[{"label":"Россия: выборы-95","url":"http://www.ice.ru/","archived":true}]},{"date":{"ru":"8 / 21 ноября","en":"8 / 21 November"},"text":{"ru":"Запускаются «Анекдоты из России» Дмитрия Вернера и сервер веб-издательства «Инфоарт».","en":"Dmitry Verner’s Anecdotes from Russia and the Infoart Web publishing server are launched."},"links":[{"label":"Анекдоты из России","url":"https://www.anekdot.ru/","archived":false},{"label":"Инфоарт","url":"http://www.infoart.ru/","archived":true}]},{"date":{"ru":"конец года","en":"Year end"},"text":{"ru":"Начинается проект «Деловая сеть России». IREX запускает программу расширения доступа к Интернету: на первом этапе открываются 64 точки общего доступа в странах СНГ.","en":"Work begins on the Business Network of Russia. IREX launches its Internet access expansion program; its first stage opens 64 public access points across CIS countries."},"links":[{"label":"IREX","url":"http://www.irex.ru/","archived":true}]}]},{"year":1996,"summary":{"ru":"RBnet, интернет-кафе, сетевые издания, реклама, поисковики и первые устойчивые формы интернет-сообщества.","en":"RBnet, Internet cafés, online publications, advertising, search engines and early forms of an Internet community."},"events":[{"date":{"ru":"1996","en":"1996"},"text":{"ru":"Начинается межведомственная программа национальной сети для науки и высшей школы; позднее сеть получает название RBnet.","en":"An interdepartmental program begins to build a national network for science and higher education; it is later named RBnet."},"links":[]},{"date":{"ru":"18 января","en":"18 January"},"text":{"ru":"В Санкт-Петербурге открывается «Тетрис» — первое в России интернет-кафе.","en":"Tetris opens in St Petersburg, described as Russia’s first Internet café."},"links":[{"label":"Тетрис","url":"https://web.archive.org/web/19990221145343/http://www.netcafe.spb.ru/CafeHome.html","direct":true}]},{"date":{"ru":"февраль","en":"February"},"text":{"ru":"Артемий Лебедев учреждает НЖМД — первую российскую награду за WWW-страницы. В Петербурге начинает выходить Internet Jornal — первый русский журнал, целиком посвящённый Интернету.","en":"Artemy Lebedev establishes NZhMD, Russia’s first award for Web pages. In St Petersburg, Internet Jornal begins as the first Russian magazine devoted entirely to the Internet."},"links":[{"label":"НЖМД","url":"http://www.tema.ru/"}]},{"date":{"ru":"17–21 марта","en":"17–21 March"},"text":{"ru":"Запускается Human Resources Online — первая в России и СНГ онлайновая система поиска персонала. В газете «Сегодня» появляется рубрика «Сеть»: Горный называет её первый выпуск первыми серьёзными публикациями об Интернете в центральной неспециализированной прессе.","en":"Human Resources Online launches as the first online recruitment system in Russia and the CIS. The newspaper Segodnya opens its Network section; Gorny describes its first issue as the first serious Internet coverage in the central non-specialist press."},"links":[{"label":"Human Resources Online","url":"http://www.hro.ru/"},{"label":"статья о хакерах","url":"https://web.archive.org/web/20051231221801/http://www.zhurnal.ru:80/staff/maxik/hack.htm","direct":true}]},{"date":{"ru":"март — апрель","en":"March–April"},"text":{"ru":"Открывается «Журнальный зал», начинается программа «Университетские центры Интернет», а Радио 101 первым среди российских радиостанций открывает сайт и начинает параллельную интернет-трансляцию.","en":"Magazine Hall opens, the University Internet Centers program begins, and Radio 101 becomes the first Russian radio station to open a site and stream its programming online."},"links":[{"label":"Журнальный зал","url":"http://magazines.russ.ru/"},{"label":"Университетские центры Интернет","url":"http://www.osi.ru/"},{"label":"Радио 101","url":"https://101.ru/","direct":true}]},{"date":{"ru":"14 апреля","en":"14 April"},"text":{"ru":"Антон Носик начинает в израильской газете «Вести» колонку «Наши Сети» — по летописи, первую постоянную русскоязычную колонку, целиком посвящённую Интернету.","en":"Anton Nosik begins Nashi Seti in the Israeli newspaper Vesti, described in the chronicle as the first regular Russian-language column devoted entirely to the Internet."},"links":[{"label":"Наши Сети","url":"http://www.sharat.co.il/vesti/zametki.html"}]},{"date":{"ru":"май — июнь","en":"May–June"},"text":{"ru":"Создаётся РОЦИТ, начинает работу конкурс сетевой литературы «Тенета», а компания «Стек» начинает разработку Rambler. Tomcat.ru первым в России запускает бесплатные e-mail-рассылки курсов валют и прогноза погоды.","en":"ROCIT is created, the Teneta online-literature competition begins, and Stack starts work on Rambler. Tomcat.ru launches Russia’s first free e-mail distributions of exchange rates and weather forecasts."},"links":[{"label":"РОЦИТ","url":"https://rocit.ru/","direct":true},{"label":"Тенета","url":"http://www.teneta.ru/"},{"label":"Rambler","url":"https://www.rambler.ru/","direct":true}]},{"date":{"ru":"29 июня","en":"29 June"},"text":{"ru":"«Симплекс» Алекса Фарбера и «СовИнформБюро» Вадима Маслова становятся первыми частными страницами русской Сети, разместившими рекламу за деньги.","en":"Alex Farber’s Simplex and Vadim Maslov’s SovInformBuro become the first private pages of the Russian Web to carry paid advertising."},"links":[{"label":"Симплекс","url":"http://www.simplex.ru/"},{"label":"СовИнформБюро","url":"http://www.kovrik.com/sib/","direct":true}]},{"date":{"ru":"16 июля","en":"16 July"},"text":{"ru":"Национальная служба новостей оперативно освещает через WWW выборы президента России.","en":"The National News Service provides rapid Web coverage of Russia’s presidential election."},"links":[{"label":"Национальная служба новостей","url":"http://www.nns.ru/"}]},{"date":{"ru":"август","en":"August"},"text":{"ru":"Появляется Sputnik — первая русская рекламная сеть: она не обменивает баннеры, а покупает показы у участников и продаёт их рекламодателям.","en":"Sputnik appears as the first Russian advertising network: rather than exchanging banners, it buys impressions from participating sites and sells them to advertisers."},"links":[]},{"date":{"ru":"9–10 сентября","en":"9–10 September"},"text":{"ru":"Открываются Cooking.ru и «Чертовы Кулички». «Кулички» становятся первым сервером с бесплатным хостингом русскоязычных авторских проектов.","en":"Cooking.ru and Chertovy Kulichki open. Kulichki becomes the first server to provide free hosting for Russian-language author projects."},"links":[{"label":"Cooking.ru","url":"http://www.cooking.ru/"},{"label":"Чертовы Кулички","url":"https://www.kulichki.com/","direct":true}]},{"date":{"ru":"2–24 октября","en":"2–24 October"},"text":{"ru":"Выходит первый номер Zhurnal.ru. «Серебряный Дождь» начинает круглосуточное интернет-вещание; 22 октября НЖМД становится первой российской частной страницей с платной рекламой российского спонсора; Артемий Лебедев открывает WebDesign; Zhurnal.ru проводит первую российскую онлайн-конференцию в IRC.","en":"The first issue of Zhurnal.ru appears. Silver Rain begins round-the-clock Internet broadcasting; on 22 October NZhMD becomes the first Russian private page to carry paid advertising from a Russian sponsor; Artemy Lebedev opens WebDesign; Zhurnal.ru runs Russia’s first online IRC conference."},"links":[{"label":"первый номер Zhurnal.ru","url":"https://web.archive.org/web/20060111011809/http://www.zhurnal.ru:80/1/","direct":true},{"label":"Серебряный Дождь","url":"http://www.silver.ru/"},{"label":"WebDesign","url":"http://www.design.ru/"}]},{"date":{"ru":"27 октября — 6 ноября","en":"27 October – 6 November"},"text":{"ru":"В Zhurnal.ru открывается Hack Zone — площадка открытого обсуждения компьютерной безопасности. Затем начинает выходить «Паравозов-News», вскоре ставший одним из контент-проектов Cityline.","en":"Zhurnal.ru opens Hack Zone for public discussion of computer security. Paravozov-News then begins and soon becomes one of Cityline’s content projects."},"links":[{"label":"Hack Zone","url":"https://web.archive.org/web/20060213010013/http://www.zhurnal.ru:80/hack-zone/","direct":true},{"label":"Паравозов-News","url":"http://www.cityline.ru/paravozov-news/"}]},{"date":{"ru":"21–25 ноября","en":"21–25 November"},"text":{"ru":"В сети публикуется интервью с Александром Лебедем в RealAudio; Futures Telecom впервые транслирует концерт непосредственно из зала; CompTek представляет русифицированный поиск AltaVista с учётом морфологии.","en":"An interview with Alexander Lebed appears online in RealAudio; Futures Telecom streams a concert directly from the venue for the first time; CompTek presents Russian-language AltaVista search with morphology support."},"links":[{"label":"Intellectual Capital","url":"http://www.intellectualcapital.com/"},{"label":"Futures Telecom","url":"https://www.freelines.ru/","direct":true},{"label":"CompTek","url":"https://www.comptek.ru/","direct":true}]},{"date":{"ru":"29 ноября","en":"29 November"},"text":{"ru":"РОЦИТ представляет каталог русскоязычных ресурсов, который через полгода получает имя «Ау!», а в июле 1999 года становится @Rus.","en":"ROCIT presents a directory of Russian-language resources; six months later it is named Au!, and in July 1999 it becomes @Rus."},"links":[{"label":"источник о каталоге «Ау!»","url":"https://www.netslova.ru/gorny/rulet/sources.html#68","direct":true}]},{"date":{"ru":"ноябрь","en":"November"},"text":{"ru":"КОМКОН-2 под руководством Петра Залесского начинает регулярные общенациональные исследования аудитории Интернета.","en":"KOMKON-2, led by Petr Zalessky, begins regular nationwide studies of the Internet audience."},"links":[]},{"date":{"ru":"декабрь","en":"December"},"text":{"ru":"Открывается первая версия «Кроватки»; на рынок выходит Cityline, использующий популярные сетевые издания как контент-проекты и рекламу провайдера.","en":"The first version of Krovatka opens; Cityline enters the market, using popular online publications as content projects and promotion for the provider."},"links":[{"label":"Кроватка","url":"http://www.krovatka.ru/"},{"label":"Cityline","url":"http://www.cityline.ru/"}]},{"date":{"ru":"18–24 декабря","en":"18–24 December"},"text":{"ru":"Music.ru даёт возможность слушать музыку в RealAudio; «Инфоарт» запускает Internet Stars, позднее Stars.ru и 1000Stars; Антон Носик начинает ежедневное обозрение «Вечерний Интернет».","en":"Music.ru offers music in RealAudio; Infoart launches Internet Stars, later Stars.ru and 1000Stars; Anton Nosik begins the daily review Vechernii Internet."},"links":[{"label":"Music.ru","url":"http://www.music.ru/"},{"label":"Stars.ru","url":"http://www.stars.ru/"},{"label":"Вечерний Интернет","url":"http://www.cityline.ru/vi/current.htm"}]},{"date":{"ru":"30 декабря","en":"30 December"},"text":{"ru":"Zhurnal.ru и «Чертовы Кулички» открывают дискуссию «Сетевой секс — теория и практика»; Горный отмечает это как первое публичное обсуждение секса в Сети.","en":"Zhurnal.ru and Chertovy Kulichki open the discussion Network Sex — Theory and Practice; Gorny marks it as the first public discussion of sex on the Russian Web."},"links":[{"label":"третий выпуск Zhurnal.ru","url":"http://www.zhurnal.ru/3/"}]}]},{"year":1997,"summary":{"ru":"ICQ, сетевые обозрения, виртуальные личности, «Еже-движение», рейтинги, push-технологии и Яndex.","en":"ICQ, Web reviews, virtual identities, the Ezhe movement, rankings, push technologies and Yandex."},"events":[{"date":{"ru":"январь","en":"January"},"text":{"ru":"Выходит справочник «Жёлтые страницы Internet — 1997» примерно с 1500 ресурсами; Internet Jornal превращается в «Мир Internet»; Mirabilis выпускает первую ICQ; открывается электронная «Компьютерра». Издательство «Открытые системы» выпускает первый и единственный номер «Вавилона», задуманного как «русский Wired».","en":"Yellow Pages Internet — 1997 appears with about 1,500 resources; Internet Jornal becomes Mir Internet; Mirabilis releases the first ICQ; an electronic Computerra opens. Open Systems publishes the first and only issue of Babylon, conceived as a “Russian Wired.”"},"links":[{"label":"Мир Internet","url":"http://www.iworld.ru/"},{"label":"Mirabilis / ICQ","url":"http://www.mirabilis.com/"},{"label":"Компьютерра","url":"https://www.computerra.ru/","direct":true}]},{"date":{"ru":"17 января","en":"17 January"},"text":{"ru":"В Zhurnal.ru начинают выходить «Перелётные мухи» М. И. Мухина — еженедельные обзоры Паутины, заметно повлиявшие на русскую сетевую публицистику.","en":"M. I. Mukhin’s Migratory Flies begins in Zhurnal.ru as a weekly Web review that strongly influences Russian online journalism."},"links":[{"label":"Перелётные мухи","url":"https://web.archive.org/web/20060212024536/http://www.zhurnal.ru:80/muxi/","direct":true}]},{"date":{"ru":"30 января — 4 февраля","en":"30 January – 4 February"},"text":{"ru":"«Открытые системы» начинают регулярные компьютерные новости, возникает список pogoda@, а Cityline запускает TrubAddUrl — позднее «Систему TAU» — для автоматической подачи URL в поисковики и каталоги.","en":"Open Systems begins regular computer news, the pogoda@ mailing list appears, and Cityline launches TrubAddUrl — later the TAU System — for automated URL submission to search engines and directories."},"links":[{"label":"Открытые системы","url":"https://www.osp.ru/","direct":true},{"label":"Система TAU","url":"http://www.design.ru/free/addurl"}]},{"date":{"ru":"17 февраля — 3 марта","en":"17 February – 3 March"},"text":{"ru":"Разоблачение Кати Деткиной становится первым громким скандалом русской Сети. Обсуждаются авторство, анонимность, виртуальность, этика, свобода и ответственность; затем объявляется о «гибели» виртуального персонажа.","en":"The exposure of Katya Detkina becomes the first major scandal of the Russian Web. Debate centers on authorship, anonymity, virtual identity, ethics, freedom and responsibility, followed by the announced “death” of the virtual persona."},"links":[{"label":"CrazyWeb","url":"http://www.crazyweb.ru/"},{"label":"Обзирания русского Интернета","url":"http://kulichki.com/katya/"}]},{"date":{"ru":"3–9 марта","en":"3–9 March"},"text":{"ru":"Открывается литературная «Словесность»; Сергей Кузнецов начинает «Сеновал»; новая «Онейрократия» позволяет записывать сны через онлайн-форму.","en":"The literary journal Slovesnost opens; Sergey Kuznetsov begins Senoval; the new Oneirocracy allows dreams to be submitted through an online form."},"links":[{"label":"Сетевая словесность","url":"https://www.netslova.ru/","direct":true},{"label":"Сеновал","url":"http://www.cityline.ru/senoval"},{"label":"Онейрократия","url":"http://www.zhurnal.ru/dreams/"}]},{"date":{"ru":"16–24 марта","en":"16–24 March"},"text":{"ru":"Проходит первый Российский Интернет Форум; начинается «Еже-движение»; запускается Rambler’s Top 100 со счётчиками посещений и рейтингом сайтов.","en":"The first Russian Internet Forum takes place; the Ezhe movement begins; Rambler’s Top 100 launches with visitor counters and site rankings."},"links":[{"label":"Российский Интернет Форум","url":"http://www.rif.ru/"},{"label":"Rambler’s Top 100","url":"http://top100.rambler.ru/top100/"}]},{"date":{"ru":"27–31 марта","en":"27–31 March"},"text":{"ru":"Открывается «Московский музыкальный вестник», а Web Design публикует онлайн-декодер писем в неизвестной кодировке.","en":"Moscow Music Bulletin opens, while Web Design publishes an online decoder for e-mail received in unknown encodings."},"links":[{"label":"Московский музыкальный вестник","url":"http://www.mmv.ru/"},{"label":"почтовый декодер","url":"http://www.design.ru/free/decoder/"}]},{"date":{"ru":"14 апреля — ноябрь","en":"14 April – November"},"text":{"ru":"«Еже-движение» расширяется: появляются «Еженедельки», в августе — список ezhe@, а в ноябре — ФРИ («Физиономии российского Интернета»).","en":"The Ezhe movement expands: weekly link exchanges appear, followed by the ezhe@ mailing list in August and FRI (Faces of the Russian Internet) in November."},"links":[{"label":"Еже-движение","url":"http://www.ezhe.ru/"}]},{"date":{"ru":"10–23 мая","en":"10–23 May"},"text":{"ru":"Начинают выходить End of The World News и «Русские кружева»; NetSkate выпускает «Русскую новостную дорожку», позднее News Alert.","en":"End of The World News and Russian Lace begin; NetSkate releases the Russian News Ticker, later renamed News Alert."},"links":[{"label":"End of The World News","url":"http://imperium.lenin.ru/EOWN/"},{"label":"News Alert","url":"http://www.newsalert.msnbc.ru/"}]},{"date":{"ru":"15–25 июня","en":"15–25 June"},"text":{"ru":"В Zhurnal.ru открывается русское зеркало ClickZ — первое специализированное издание об интернет-рекламе; в пятом выпуске Zhurnal.ru впервые можно оставить отзыв к каждой отдельной статье.","en":"Zhurnal.ru opens a Russian mirror of ClickZ, the first specialized publication on Internet advertising; issue five introduces comments on individual articles."},"links":[{"label":"ClickZ","url":"http://www.zhurnal.ru/clickz/"},{"label":"5-й выпуск Zhurnal.ru","url":"http://www.zhurnal.ru/5/"}]},{"date":{"ru":"14–15 июля","en":"14–15 July"},"text":{"ru":"Открывается «Русский Журнал» — первый интернет-проект Фонда эффективной политики; «Инфоарт» объявляет первые официально зарегистрированные русскоязычные push-каналы.","en":"Russky Zhurnal opens as the first Internet project of the Foundation for Effective Politics; Infoart announces the first officially registered Russian-language push channels."},"links":[{"label":"Русский Журнал","url":"http://russ.ru/"},{"label":"Инфоарт","url":"http://www.infoart.ru/"}]},{"date":{"ru":"8–19 августа","en":"8–19 August"},"text":{"ru":"Выходит журнал Internet, запускается баннерная сеть Reklama.ru и начинает выходить Upground Music Newsletter.","en":"Internet magazine appears, the Reklama.ru banner network launches, and Upground Music Newsletter begins."},"links":[{"label":"журнал Internet","url":"http://www.inter.net.ru/"},{"label":"Reklama.ru","url":"http://www.reklama.ru/"},{"label":"Upground Music Newsletter","url":"http://www.willy.msk.ru/"}]},{"date":{"ru":"15 сентября","en":"15 September"},"text":{"ru":"Открывается бесплатная почтовая служба Pochta.ru; из-за несовершенства программного обеспечения она вскоре закрывается.","en":"The free e-mail service Pochta.ru opens but soon closes because of software problems."},"links":[{"label":"Pochta.ru","url":"http://www.pochta.ru/"}]},{"date":{"ru":"23 сентября","en":"23 September"},"text":{"ru":"Официально открывается Яndex.ru — поиск по русской Сети с полным учётом морфологии русского языка.","en":"Yandex.ru officially opens with Russian Web search that fully accounts for Russian morphology."},"links":[{"label":"Яndex","url":"https://www.yandex.ru/","direct":true}]},{"date":{"ru":"25–27 сентября","en":"25–27 September"},"text":{"ru":"Появляется русская версия Intellectual Capital и интерактивная литературная игра «Сад расходящихся хокку».","en":"A Russian edition of Intellectual Capital appears along with the interactive literary game Garden of Forking Haiku."},"links":[{"label":"Intellectual Capital","url":"http://www.intellectualcapital.ru/"},{"label":"Сад расходящихся хокку","url":"https://hokku.netslova.ru/","direct":true}]},{"date":{"ru":"31 сентября","en":"31 September"},"text":{"ru":"Группа сетевых деятелей взламывает счётчик Rambler Top 100, «разгоняя» сайт клуба его любителей до первого места; после этого рейтинг вводит более развёрнутые категории.","en":"A group of Internet figures hacks the Rambler Top 100 counter, pushing a fan-club site to first place; the ranking subsequently introduces more detailed categories."},"links":[{"label":"клуб любителей Rambler Top 100","url":"http://chaepitie.ml.org/"}]},{"date":{"ru":"6 декабря","en":"6 December"},"text":{"ru":"Открывается «Робот Сергей Дацюк» — генератор научно-философских текстов, комбинирующий фрагменты произведений Сергея Дацюка.","en":"Robot Sergey Datsyuk opens, a generator of scientific-philosophical texts combining fragments of Sergey Datsyuk’s writing."},"links":[{"label":"Робот Сергей Дацюк","url":"http://rosd.org.ru/"}]},{"date":{"ru":"декабрь","en":"December"},"text":{"ru":"Открывается сервер Фонда эффективной политики, который в следующем году сыграет заметную роль в развитии информационного и общественно-политического сектора Рунета.","en":"The Foundation for Effective Politics opens its server, which will play a major role in the following year’s informational and political Runet."},"links":[{"label":"Фонд эффективной политики","url":"http://www.fep.ru/"}]}]},{"year":1998,"summary":{"ru":"Сетевое искусство, политический Интернет, интернет-радио, СОРМ-2, финансовый кризис, Mail.ru и новые формы сетевого компромата.","en":"Net art, political Internet, Internet radio, SORM-2, the financial crisis, Mail.ru and new forms of online kompromat."},"events":[{"date":{"ru":"5 января","en":"5 January"},"text":{"ru":"Начинает выходить «Бессрочная ссылка» Романа Лейбова — авторская колонка, смешивающая сетевые наблюдения, цитаты и интерактивные игры.","en":"Roman Leibov’s Bessrochnaya Ssylka begins, mixing online observations, quotations and interactive games."},"links":[{"label":"Бессрочная ссылка","url":"http://old.russ.ru/ssylka"}]},{"date":{"ru":"8–20 января","en":"8–20 January"},"text":{"ru":"Тимофей Бокарев открывает Tim Promotion, позднее Promo.Ru; появляется PSyberLink — первый российский каталог интернет-ресурсов по психологии и социальным наукам.","en":"Timofey Bokarev opens Tim Promotion, later Promo.Ru; PSyberLink appears as the first Russian directory of Internet resources on psychology and the social sciences."},"links":[{"label":"Tim Promotion","url":"http://www.aha.ru/~timofey/"},{"label":"PSyberLink","url":"http://www.nsu.ru/psych/internet"}]},{"date":{"ru":"30 января","en":"30 January"},"text":{"ru":"В «Сумасшедшем Доме Мистера Паркера» выходит первый выпуск обзора российской поп-музыки «Русский POP».","en":"The first issue of the Russian pop-music review Russkii POP appears in Mr Parker’s Madhouse."},"links":[{"label":"Русский POP / Zema.Ru","url":"http://www.zema.ru/"}]},{"date":{"ru":"18–24 февраля","en":"18–24 February"},"text":{"ru":"В Zhurnal.ru открывается «Полит.ру». Российский хакер Владимир Левин получает в Нью-Йорке три года тюрьмы за хищение денег из Citibank.","en":"Polit.ru opens within Zhurnal.ru. Russian hacker Vladimir Levin is sentenced in New York to three years in prison for stealing money from Citibank."},"links":[{"label":"Полит.ру","url":"https://polit.ru/","direct":true}]},{"date":{"ru":"16 марта","en":"16 March"},"text":{"ru":"Открывается первый в российском Интернете персональный сервер политика — официальный сайт Бориса Немцова; одновременно появляется отдельная неформальная страница.","en":"The first personal server of a Russian politician opens: Boris Nemtsov’s official site, alongside a separate informal page."},"links":[{"label":"официальный сайт Немцова","url":"http://www.nemtsov.ru/"},{"label":"неформальная страница Немцова","url":"http://www.boris.nemtsov.ru/"}]},{"date":{"ru":"21–31 марта","en":"21–31 March"},"text":{"ru":"Леонид Делицын предлагает «горбикс» — индекс популярности политиков в Сети; в форуме Glasnet происходит первая интернет-перепалка действующих российских политиков.","en":"Leonid Delitsyn proposes Gorbix, an index of politicians’ online popularity; a Glasnet forum hosts the first online clash between serving Russian politicians."},"links":[{"label":"«Кто в Совмине всех плохее?»","url":"http://www.glasnet.ru/forum/"}]},{"date":{"ru":"март — 1 апреля","en":"March – 1 April"},"text":{"ru":"Подводятся итоги первого фестиваля «Да-да-нет». В Русском Журнале появляются рубрики «Net-культура» и «Сетевая жизнь»; Антон Носик публикует сетевую пьесу «Рунет с маком».","en":"The first Da-Da-Net festival announces its results. Russky Zhurnal opens Net Culture and Network Life; Anton Nosik publishes the online play Runet s makom."},"links":[{"label":"Да-да-нет","url":"http://www.da-da-net.ru/"},{"label":"Net-культура","url":"http://old.russ.ru/netcult"}]},{"date":{"ru":"6–22 апреля","en":"6–22 April"},"text":{"ru":"Zhurnal.ru открывает рубрику Net Art Алексея Шульгина; запускается VRML-проект «Виртуальный Мавзолей Ленина».","en":"Zhurnal.ru opens Alexei Shulgin’s Net Art section; the VRML project Virtual Lenin Mausoleum launches."},"links":[{"label":"Net Art","url":"https://web.archive.org/web/20060215012951/http://www.zhurnal.ru:80/netart/","direct":true},{"label":"Виртуальный Мавзолей Ленина","url":"http://www.lenin.ru/"}]},{"date":{"ru":"28 апреля — 12 мая","en":"28 April – 12 May"},"text":{"ru":"Радио 101 резко расширяет возможную интернет-аудиторию; начинает работать RadioNet — первая российская радиопрограмма только для Интернета; Борис Ельцин участвует в интернет-пресс-конференции на #msnbc.","en":"Radio 101 greatly expands its possible online audience; RadioNet begins as Russia’s first Internet-only radio program; Boris Yeltsin takes part in an Internet press conference on #msnbc."},"links":[{"label":"RadioNet","url":"http://www.radionet.cl.spb.ru/"}]},{"date":{"ru":"23–28 июня","en":"23–28 June"},"text":{"ru":"В Москве проходит первая российская конференция по интернет-маркетингу. «Московский Либертариум» открывает раздел о СОРМ-2, выводя сетевое наблюдение в публичную дискуссию.","en":"Moscow hosts Russia’s first conference on Internet marketing. Moscow Libertarium opens a SORM-2 section, bringing online surveillance into public debate."},"links":[{"label":"раздел о СОРМ-2","url":"http://www.ice.ru/libertarium/sorm"}]},{"date":{"ru":"июнь","en":"June"},"text":{"ru":"Исследование IDC оценивает аудиторию российского Интернета в 1,2 млн пользователей против 384 тыс. в 1996 году.","en":"An IDC study estimates the Russian Internet audience at 1.2 million users, compared with 384,000 in 1996."},"links":[]},{"date":{"ru":"15–17 августа","en":"15–17 August"},"text":{"ru":"Артемий Лебедев предлагает систему трёхбуквенных сокращений для рекламных сетей. Финансовый кризис резко повышает спрос на финансово-политическую информацию; лидером становится РБК, несколько раз расширяющий канал.","en":"Artemy Lebedev proposes three-letter abbreviations for advertising networks. The financial crisis sharply increases demand for financial-political information; RBC becomes the leading source and repeatedly expands its connection."},"links":[{"label":"РБК","url":"https://www.rbc.ru/","direct":true}]},{"date":{"ru":"20 августа","en":"20 August"},"text":{"ru":"Проходит онлайн-конференция с космонавтами станции «Мир»; в августе открывается сервер «Современное искусство в Сети».","en":"An online conference is held with cosmonauts aboard Mir; in August the Contemporary Art on the Web server opens."},"links":[{"label":"станция «Мир»","url":"http://www.mir.cosmos.ru/"},{"label":"Современное искусство в Сети","url":"http://www.guelman.ru/"}]},{"date":{"ru":"сентябрь","en":"September"},"text":{"ru":"Фонд «Евразия» поддерживает 14 русскоязычных интернет-проектов; Антон Носик открывает страницу «Гонорар Биллу Клинтону» со ссылками и новостями о скандале Клинтон—Левински.","en":"The Eurasia Foundation supports 14 Russian-language Internet projects; Anton Nosik opens Honorarium to Bill Clinton with links and news on the Clinton–Lewinsky scandal."},"links":[{"label":"Гонорар Биллу Клинтону","url":"http://www.cityline.ru/sexybill"}]},{"date":{"ru":"5–20 октября","en":"5–20 October"},"text":{"ru":"Фонд Сороса проводит конкурс электронных публикаций в культуре и гуманитарных знаниях; проходит первый ОСКОМ; открывается «Кирилл и Мефодий: Знания обо всём».","en":"The Soros Foundation runs a competition for electronic publications in culture and the humanities; the first OSKOM takes place; Kirill & Mefodiy: Knowledge About Everything opens."},"links":[{"label":"Кирилл и Мефодий","url":"https://www.km.ru/","direct":true}]},{"date":{"ru":"1 ноября","en":"1 November"},"text":{"ru":"Открывается бесплатная почтовая служба Mail.ru. Позднейшую продажу 20% Port.ru иностранным инвесторам Горный называет первой крупной сделкой в российском Интернете.","en":"The free Mail.ru service opens. Gorny describes the later sale of 20% of Port.ru to foreign investors as the first major deal in the Russian Internet."},"links":[{"label":"Mail.ru","url":"https://mail.ru/","direct":true}]},{"date":{"ru":"3–6 ноября","en":"3–6 November"},"text":{"ru":"В Новосибирске проходит фестиваль «Интернить-98» и конкурс «Бизнес-Сайт’98»; гран-при получает РосБизнесКонсалтинг.","en":"The Internit-98 festival and Business-Site ’98 competition take place in Novosibirsk; RBC wins the Grand Prix."},"links":[]},{"date":{"ru":"ноябрь — декабрь","en":"November–December"},"text":{"ru":"Начинается конкурс «Золотой УРЛ»; открываются «Электронная библиотека для российских учёных» и сайт политических слухов Rumours.ru; Сергей Кириенко получает персональный сайт.","en":"The Golden URL competition begins; the Electronic Library for Russian Scientists and the political-rumor site Rumours.ru open; Sergey Kiriyenko gets a personal website."},"links":[{"label":"Золотой УРЛ","url":"http://www.goldenurl.radio.ru/"},{"label":"Rumours.ru","url":"http://www.rumours.ru/"},{"label":"сайт Сергея Кириенко","url":"http://www.kirienko.ru/"}]},{"date":{"ru":"декабрь","en":"December"},"text":{"ru":"Intel публикует визуальную «Карту русскоязычных ресурсов Интернет», Gallup Media начинает изучать аудиторию; по отчёту РОЦИТ в России около 1,5 млн пользователей, более 300 провайдеров и свыше 26 тыс. ресурсов.","en":"Intel publishes a visual Map of Russian-language Internet Resources, Gallup Media begins audience research, and a ROCIT report estimates about 1.5 million users, more than 300 providers and over 26,000 resources."},"links":[{"label":"Карта русскоязычных ресурсов","url":"http://www.intel.ru/rus/internet/map/"}]}]},{"year":1999,"summary":{"ru":"Ежедневные онлайн-медиа, политические проекты, авторское право, аудитория, статистика и институционализация Рунета.","en":"Daily online media, political projects, copyright, audience research, statistics and the institutionalization of Runet."},"events":[{"date":{"ru":"22–27 января","en":"22–27 January"},"text":{"ru":"Яndex вводит НИНИ-индекс для еженедельного мониторинга изменений пользовательских интересов. Выходит первый выпуск «Правды-Интернет», будущей «Правды.ру».","en":"Yandex introduces the NINI index for weekly monitoring of changes in user interests. The first issue of Pravda-Internet, later Pravda.ru, appears."},"links":[{"label":"Правда.ру","url":"http://www.pravda.ru/"}]},{"date":{"ru":"1–5 февраля","en":"1–5 February"},"text":{"ru":"В Петербурге проходит международная конференция «Интернет. Общество. Личность» о применении интернет-технологий в гуманитарных областях и социальной сфере.","en":"St Petersburg hosts the international conference Internet. Society. Personality on the use of Internet technologies in the humanities and social sphere."},"links":[{"label":"Интернет. Общество. Личность","url":"http://iol.spb.osi.ru/IOL1999"}]},{"date":{"ru":"12–18 февраля","en":"12–18 February"},"text":{"ru":"Открывается «Интернет-парламент» Сергея Кириенко и ФЭП; затем появляется «Коготь-2» — анонимный сайт с компроматом на Анатолия Быкова.","en":"Sergey Kiriyenko and FEP open the Internet Parliament; Kogot-2 then appears as an anonymous kompromat site focused on Anatoly Bykov."},"links":[{"label":"Интернет-парламент","url":"http://www.elections.ru/"},{"label":"Коготь-2","url":"http://www.krasnobykow.com/"}]},{"date":{"ru":"1 марта","en":"1 March"},"text":{"ru":"Выходит первая российская ежедневная интернет-газета Gazeta.ru: главный редактор Антон Носик, дизайн Артемия Лебедева, программирование Максима Мошкова.","en":"Gazeta.ru launches as Russia’s first daily Internet newspaper, edited by Anton Nosik, designed by Artemy Lebedev and programmed by Maxim Moshkov."},"links":[{"label":"архив Gazeta.ru","url":"http://www.gazeta.msk.ru/"}]},{"date":{"ru":"5–13 марта","en":"5–13 March"},"text":{"ru":"Ложное сообщение о самоубийстве губернатора Петербурга вызывает дискуссию об Интернете как среде дезинформации. Затем проходит третий Российский Интернет Форум.","en":"A false report of the St Petersburg governor’s suicide triggers debate about the Internet as a medium of disinformation. The third Russian Internet Forum follows."},"links":[{"label":"Forum.msk.ru","url":"http://forum.msk.ru/"}]},{"date":{"ru":"март","en":"March"},"text":{"ru":"Тема сетевой элиты становится предметом рейтингов и проектов: журнал Internet публикует «108 лучших русской Сети», Горный и Шерман открывают «Инфократию». Параллельно развивается конфликт Иванопуло с Macromedia вокруг программ для взлома её продуктов.","en":"The network elite becomes the subject of rankings and projects: Internet magazine publishes “108 Best of the Russian Web,” while Gorny and Sherman launch Infocracy. At the same time, Ivanopulo clashes with Macromedia over programs used to crack its products."},"links":[{"label":"13-й выпуск Internet","url":"http://inter.net.ru/13/"},{"label":"Инфократия","url":"http://www.guelman.ru/vse_obozrev/gorniy.html"}]},{"date":{"ru":"21 апреля — 14 мая","en":"21 April – 14 May"},"text":{"ru":"ФЭП запускает в Израиле предвыборный сайт «Мы — за Барака!». Студия Артемия Лебедева открывает рекламную сеть RB2, за месяц достигшую миллиона показов в сутки.","en":"FEP launches the election site We Are for Barak! in Israel. Artemy Lebedev Studio opens the RB2 advertising network, which reaches one million impressions per day within a month."},"links":[{"label":"Мы — за Барака!","url":"http://www.ehudbarak.org.il/"},{"label":"RB2","url":"http://www.design.ru/free/rb2/"}]},{"date":{"ru":"24 мая — июль","en":"24 May – July"},"text":{"ru":"Подводятся итоги «Да-Да-Net’99» и Trash Art. Каталог «Ау!» запускает бесплатную почту Au.ru и через месяц переименовывается в @Rus.","en":"Da-Da-Net ’99 and Trash Art announce their results. The Au! directory launches free e-mail at Au.ru and is renamed @Rus a month later."},"links":[{"label":"@Rus","url":"https://web.archive.org/web/20001019080348/http://www.atrus.ru/","direct":true}]},{"date":{"ru":"21 июня","en":"21 June"},"text":{"ru":"Журнал «Компания» публикует статью «Трест Рунет» о предполагаемом контроле влиятельных сетевых СМИ крупными финансовыми группами; текст вызывает широкую полемику.","en":"Kompaniya publishes the article Runet Trust about alleged control of influential online media by major financial groups; it triggers extensive debate."},"links":[]},{"date":{"ru":"15–21 июля","en":"15–21 July"},"text":{"ru":"После публикации Gazeta.ru сведения об эпидемии в Ростовской области подхватывают ведущие СМИ — ранний случай, когда сетевой ресурс становится исходным источником новости. Скандал вокруг публикации «Голубого сала» перерастает в дискуссию об авторском праве в Интернете.","en":"After Gazeta.ru reports an epidemic in the Rostov region, leading media follow — an early case of an online source originating a major story. The dispute over publication of Blue Lard expands into a debate about Internet copyright."},"links":[]},{"date":{"ru":"28 июля — 30 сентября","en":"28 July – 30 September"},"text":{"ru":"Открывается сайт информационно-поисковой службы уголовного розыска Петербурга. «Инфоарт» начинает «Московский международный Интернет-фестиваль’99».","en":"The St Petersburg criminal-investigation information service opens a website. Infoart begins the Moscow International Internet Festival ’99."},"links":[{"label":"Уголовный розыск Санкт-Петербурга","url":"http://www.ugro.spb.ru/"},{"label":"Интернет-фестиваль’99","url":"http://www.iday.stars.ru/"}]},{"date":{"ru":"19 августа","en":"19 August"},"text":{"ru":"Яndex вводит «семейный» поиск, фильтрующий страницы с нецензурной лексикой и порнографией.","en":"Yandex introduces family search, filtering pages with obscene language and pornography."},"links":[{"label":"семейный поиск","url":"https://family.yandex.ru/","direct":true}]},{"date":{"ru":"1 сентября","en":"1 September"},"text":{"ru":"Выходит сетевая версия «Независимой газеты» — первая крупная ежедневная газета, полностью публикующая материалы в свободном доступе.","en":"The online edition of Nezavisimaya Gazeta appears, the first major daily newspaper to publish its full contents freely online."},"links":[{"label":"Независимая газета","url":"https://www.ng.ru/","direct":true}]},{"date":{"ru":"4 сентября","en":"4 September"},"text":{"ru":"Проходит церемония награждения «Тенета-Ринет’98» и открывается круглосуточная новостная служба Lenta.ru.","en":"The Teneta-Rinet ’98 awards ceremony takes place and the round-the-clock news service Lenta.ru opens."},"links":[{"label":"церемония «Тенета-Ринет’98»","url":"http://www.teneta.ru/1998/ceremony"},{"label":"Lenta.ru","url":"https://lenta.ru/","direct":true}]},{"date":{"ru":"8–21 сентября","en":"8–21 September"},"text":{"ru":"Открывается Monitoring.ru для регулярных исследований web-аудитории; появляется альтернативный официальный сайт Юрия Лужкова, ставший популярным после попыток его закрыть.","en":"Monitoring.ru opens for regular Web-audience research; an alternative official Yuri Luzhkov site appears and becomes popular after attempts to shut it down."},"links":[{"label":"Monitoring.ru","url":"http://www.monitoring.ru/"},{"label":"lujkov.ru","url":"http://www.lujkov.ru/"}]},{"date":{"ru":"27–29 сентября","en":"27–29 September"},"text":{"ru":"Фонд «Евразия» поддерживает восемь проектов интернет-коммерции в регионах; выходит первый номер «Утра»; объявляется о создании Союза операторов Интернет.","en":"The Eurasia Foundation supports eight regional Internet-commerce projects; the first issue of Utro appears; the Union of Internet Operators is announced."},"links":[{"label":"Утро","url":"https://utro.ru/","direct":true},{"label":"Союз операторов Интернет","url":"http://www.soi.ru/"}]},{"date":{"ru":"1–4 октября","en":"1–4 October"},"text":{"ru":"Открываются СМИ.Ру и Vesti.ru. В октябре завершается программа «Университетские центры Интернет»: создано 33 университетских центра с доступом в Сеть.","en":"SMI.ru and Vesti.ru open. In October the University Internet Centers program ends after creating 33 Internet-equipped university centers."},"links":[{"label":"СМИ.Ру","url":"http://www.smi.ru/"},{"label":"Vesti.ru","url":"https://www.vesti.ru/","direct":true}]},{"date":{"ru":"9–11 ноября","en":"9–11 November"},"text":{"ru":"В Новосибирске проходит «Интернить’99». Участники обращаются к Владимиру Путину с предложением создать пространство для диалога государства и интернет-сообщества; премьер поручает организовать встречу.","en":"Internit ’99 takes place in Novosibirsk. Participants appeal to Vladimir Putin to create a space for dialogue between government and the Internet community; the prime minister orders a meeting to be arranged."},"links":[{"label":"Интернить’99","url":"http://www.festival.sibfair.ru/"},{"label":"Бизнес-сайт’99","url":"http://www.festival.sibfair.ru/konkurs"}]},{"date":{"ru":"17–29 ноября","en":"17–29 November"},"text":{"ru":"Начинают выходить Internet.ru и eMedia; «ТелеРосс» объявляет о покупке «Невалинка» и «НеваТелекома»; открывается SpyLOG — система сбора и анализа интернет-статистики.","en":"Internet.ru and eMedia begin publishing; TeleRoss announces the acquisition of Nevalink and NevaTelecom; SpyLOG opens as an Internet-statistics service."},"links":[{"label":"Internet.ru","url":"http://internet.ru/"},{"label":"eMedia","url":"http://www.emedia.ru/"},{"label":"SpyLOG","url":"http://spylog.ru/"}]},{"date":{"ru":"ноябрь — 1 декабря","en":"November – 1 December"},"text":{"ru":"Monitoring.ru оценивает аудиторию российского Интернета примерно в 5,4 млн человек. Объявляется о создании Российской Академии Интернет и Национальной Интел Интернет Премии; открывается Русская виртуальная библиотека.","en":"Monitoring.ru estimates the Russian Internet audience at about 5.4 million people. The Russian Academy of the Internet and the National Intel Internet Prize are announced; the Russian Virtual Library opens."},"links":[{"label":"Российская Академия Интернет","url":"http://www.academia.ru/"},{"label":"Русская виртуальная библиотека","url":"https://rvb.ru/","direct":true},{"label":"Национальная Интел Интернет Премия","url":"http://www.nagrada.ru/"}]},{"date":{"ru":"3–10 декабря","en":"3–10 December"},"text":{"ru":"Открываются «Объединённая властная группировка» и Internet Media House Russia. Арбитражный суд выносит первое решение по делу о плагиате из Интернета в пользу Promo.Ru.","en":"The United Power Grouping site and Internet Media House Russia open. An arbitration court issues the first ruling in an Internet-plagiarism case, in favor of Promo.Ru."},"links":[{"label":"Объединённая властная группировка","url":"http://www.ovg.ru/"},{"label":"Internet Media House Russia","url":"http://www.imho.ru/"},{"label":"Promo.Ru","url":"http://www.promo.ru/"}]},{"date":{"ru":"19 декабря","en":"19 December"},"text":{"ru":"Сайт Elections99.com публикует exit polls в день выборов в Госдуму и становится одним из самых известных проектов политического Рунета. Объявляется о создании Всероссийской Интернет-академии.","en":"Elections99.com publishes exit polls on parliamentary election day and becomes one of the best-known projects of political Runet. The All-Russian Internet Academy is announced."},"links":[{"label":"Elections99.com","url":"http://www.elections99.com/"},{"label":"Всероссийская Интернет-академия","url":"http://www.internetacademy.ru/"}]},{"date":{"ru":"25–29 декабря","en":"25–29 December"},"text":{"ru":"«Медиа-Мост» приобретает основные ресурсы NetSkate; Владимир Путин встречается с представителями интернет-сообщества; РосНИИРОС объявляет о снижении цены регистрации доменных имён со 100 до 36 долларов.","en":"Media-Most acquires NetSkate’s main resources; Vladimir Putin meets representatives of the Internet community; RosNIIROS announces a cut in domain-registration fees from $100 to $36."},"links":[{"label":"РосНИИРОС","url":"http://www.ripn.net/"}]}]}];
+const state={lang:"ru",current:0,accent:"#29C4D9"};
 const track=document.getElementById("track");
 const viewport=document.getElementById("viewport");
 const yearNav=document.getElementById("yearNav");
+const LINK_LABEL_EN={"13-й выпуск Internet":"13th issue of Internet","5-й выпуск Zhurnal.ru":"5th issue of Zhurnal.ru","@Rus":"@Rus","ArtPalace":"ArtPalace","Association for Progressive Communications":"Association for Progressive Communications","Cityline":"Cityline","ClickZ":"ClickZ","CompTek":"CompTek","Cooking.ru":"Cooking.ru","CrazyWEB":"CrazyWEB","CrazyWeb":"CrazyWeb","Demos Online":"Demos Online","EUnet/Relcom":"EUnet/Relcom","Elections99.com":"Elections99.com","Emul8":"Emul8","Emulation.net":"Emulation.net","End of The World News":"End of The World News","Eugene’s Electronic Library":"Eugene’s Electronic Library","Forum.msk.ru":"Forum.msk.ru","Futures Telecom":"Futures Telecom","Hack Zone":"Hack Zone","Human Resources Online":"Human Resources Online","IREX":"IREX","Intellectual Capital":"Intellectual Capital","Internet Media House Russia":"Internet Media House Russia","Internet Society":"Internet Society","Internet.ru":"Internet.ru","Lenta.ru":"Lenta.ru","Mail.ru":"Mail.ru","Mirabilis / ICQ":"Mirabilis / ICQ","Monitoring.ru":"Monitoring.ru","Music.ru":"Music.ru","Net Art":"Net Art","Net-культура":"Net Culture","News Alert":"News Alert","POMAH":"POMAH","PSyberLink":"PSyberLink","PUG":"PUG","Pochta.ru":"Pochta.ru","Promo.Ru":"Promo.Ru","RB2":"RB2","RELARN":"RELARN","RUNNet":"RUNNet","RadioNet":"RadioNet","Rambler":"Rambler","Rambler’s Top 100":"Rambler’s Top 100","Reklama.ru":"Reklama.ru","Rumours.ru":"Rumours.ru","Russia on the Net":"Russia on the Net","SpyLOG":"SpyLOG","Stars.ru":"Stars.ru","Tim Promotion":"Tim Promotion","Ukraine.org":"Ukraine.org","Upground Music Newsletter":"Upground Music Newsletter","Vesti.ru":"Vesti.ru","WebDesign":"WebDesign","Window-To-Russia":"Window-To-Russia","eMedia":"eMedia","laws.ru":"laws.ru","lujkov.ru":"lujkov.ru","www.relcom.ru":"www.relcom.ru","«Кто в Совмине всех плохее?»":"Who Is the Worst in the Cabinet?","Анекдоты из России":"Russian Anecdotes","Бард-Кафе":"Bard Café","Бессрочная ссылка":"Indefinite Link","Библиотека Мошкова":"Moshkov Library","Бизнес-сайт’99":"Business Site ’99","Буриме":"Burime","Вечерний Интернет":"Evening Internet","Виртуальный Мавзолей Ленина":"Virtual Lenin Mausoleum","Внуки Даждьбога":"Grandsons of Dazhdbog","Всероссийская Интернет-академия":"All-Russian Internet Academy","Гонорар Биллу Клинтону":"Honorarium to Bill Clinton","Да-да-нет":"Da-Da-Net","Еже-движение":"Ezhe Movement","Жалобная книга «Буриме»":"Burime Complaint Book","Журнальный зал":"Magazine Hall","Золотой УРЛ":"Golden URL","Интернет-парламент":"Internet Parliament","Интернет-фестиваль’99":"Internet Festival ’99","Интернет. Общество. Личность":"Internet. Society. Personality","Интернить’99":"Internit ’99","Инфоарт":"Infoart","Инфократия":"Infocracy","Карта русскоязычных ресурсов":"Map of Russian-language Resources","Кирилл и Мефодий":"Kirill & Mefodiy","Коготь-2":"Kogot-2","Комкон":"Komkon","Компьютерра":"Computerra","Кроватка":"Krovatka","Либертариум":"Libertarium","Мир Internet":"Mir Internet","Московский музыкальный вестник":"Moscow Music Bulletin","Мы — за Барака!":"We Are for Barak!","НЖМД":"NZhMD","Национальная Интел Интернет Премия":"National Intel Internet Prize","Национальная служба новостей":"National News Service","Наши Сети":"Our Networks","Независимая газета":"Nezavisimaya Gazeta","Обзирания русского Интернета":"Overviews of the Russian Internet","Объединённая властная группировка":"United Power Grouping","Онейрократия":"Oneirocracy","Открытые системы":"Open Systems","Паравозов-News":"Paravozov-News","Перелётные мухи":"Migratory Flies","Полит.ру":"Polit.ru","Правда.ру":"Pravda.ru","РБК":"RBC","РОЦИТ":"ROCIT","Радио 101":"Radio 101","Релком":"Relcom","Робот Сергей Дацюк":"Robot Sergey Datsyuk","РосБизнесКонсалтинг":"RosBusinessConsulting","РосНИИРОС":"RosNIIROS","Российская Академия Интернет":"Russian Academy of the Internet","Российский Интернет Форум":"Russian Internet Forum","Россия-Он-Лайн":"Russia-On-Line","Россия: выборы-95":"Russia: Elections-95","Русская виртуальная библиотека":"Russian Virtual Library","Русский POP / Zema.Ru":"Russian POP / Zema.Ru","Русский Журнал":"Russian Journal","СМИ.Ру":"SMI.ru","Сад расходящихся хокку":"Garden of Forking Haiku","Сеновал":"Senoval","Серебряный Дождь":"Silver Rain","Сетевая словесность":"Network Literature","Симплекс":"Simplex","Система TAU":"TAU System","СовИнформБюро":"SovInformBuro","Современное искусство в Сети":"Contemporary Art on the Web","Союз операторов Интернет":"Union of Internet Operators","Тенета":"Teneta","Тетрис":"Tetris","Уголовный розыск Санкт-Петербурга":"St Petersburg Criminal Investigation","Университетские центры Интернет":"University Internet Centers","Утро":"Utro","Учительская газета":"Teacher's Gazette","Фонд эффективной политики":"Foundation for Effective Politics","Чертовы Кулички":"Chertovy Kulichki","Яndex":"Yandex","архив Gazeta.ru":"Gazeta.ru archive","журнал Internet":"Internet magazine","источник 19":"source 19","источник 26":"source 26","источник о каталоге «Ау!»":"source on the “Au!” catalogue","клуб любителей Rambler Top 100":"Rambler Top 100 fan club","неформальная страница Немцова":"unofficial Nemtsov page","официальный сайт Немцова":"Nemtsov official site","первый номер Zhurnal.ru":"first issue of Zhurnal.ru","почтовый декодер":"e-mail decoder","раздел о СОРМ-2":"SORM-2 section","сайт Сергея Кириенко":"Sergei Kiriyenko site","семейный поиск":"family search","сервер в Россию":"server in Russia","станция «Мир»":"Mir space station","статья о хакерах":"article on hackers","третий выпуск Zhurnal.ru":"third issue of Zhurnal.ru","церемония «Тенета-Ринет’98»":"Teneta-Rinet ’98 ceremony"};
+const AMBIENT_FILES={"1990":["https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1990_RelcomHomeLogo.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1990_apc.jpg","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1990_book-727244963.jpg","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1990_glas.png","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1990_sv.gif"],"1991":["https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1991_ServerLogo.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1991_comp1top.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1991_isoc_logo.gif"],"1992":["https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1992_bugging.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1992_raznye.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1992_rlibrary.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1992_rusnet.gif"],"1993":["https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1993_hosting1.jpg"],"1994":["https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1994_indigo2.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1994_indy.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1994_logo_bear2.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1994_satllte.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1994_top9.jpg"],"1995":["https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1995_cw.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1995_freedom.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1995_ns.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1995_reach.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1995_rtitle.gif"],"1996":["https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1996_kr3.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1996_teneta.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1996_tetris.gif"],"1997":["https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1997_eown.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1997_icqlogo3.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1997_index-09.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1997_koleso32x2.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1997_logon.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1997_main.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1997_mux.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1997_title.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1997_top1.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1997_top_left.gif"],"1998":["https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1998_Logoart.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1998_fasad11.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1998_sis.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1998_timprod1.jpg"],"1999":["https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_2logo.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_2r_n.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_center3.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_knop_ovg.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_lo-fest-m.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_lo.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_log.jpg","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_logo.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_logo2.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_ripn13.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_uho.gif","https://raw.githubusercontent.com/Lshfn/letrunet/0dda3d81d3457269e4d8dfaf904ad6ca971cdb85/images/1999_uho4.gif"]};
+
+function toRgbTriplet(hex){
+  const clean=hex.replace("#","").trim();
+  const full=clean.length===3 ? clean.split("").map(ch=>ch+ch).join("") : clean;
+  const int=parseInt(full,16);
+  return `${(int>>16)&255},${(int>>8)&255},${int&255}`;
+}
+
+function applyAccent(hex){
+  state.accent=hex;
+  document.documentElement.style.setProperty("--accent", hex);
+  document.documentElement.style.setProperty("--accent-rgb", toRgbTriplet(hex));
+  const picker=document.getElementById("accentPicker");
+  if(picker && picker.value.toLowerCase()!==hex.toLowerCase()) picker.value=hex;
+}
+
+function displayLinkLabel(label){
+  return state.lang==="en" ? (LINK_LABEL_EN[label] || label) : label;
+}
+
+function ambientHtml(year){
+  const files=AMBIENT_FILES[year] || [];
+  if(!files.length) return "";
+  const items=files.map((url, idx)=>`
+    <div class="ambient-item" data-index="${idx}">
+      <img class="ambient-media" src="${url}" alt="" draggable="false">
+    </div>
+  `).join("");
+  return `<div class="year-ambient" aria-hidden="true">${items}</div>`;
+}
+
+let ambientControllers=[];
+
+function stopAmbientControllers(){
+  ambientControllers.forEach(controller=>controller.stop());
+  ambientControllers=[];
+}
+
+function seedRandom(seed){
+  let s=(seed >>> 0) || 1;
+  return function(){
+    s = (s * 1664525 + 1013904223) >>> 0;
+    return s / 4294967296;
+  };
+}
+
+function initAmbient(page, year){
+  const layer=page.querySelector(".year-ambient");
+  if(!layer) return;
+
+  const items=[...layer.querySelectorAll(".ambient-item")];
+  if(!items.length) return;
+
+  let raf=0;
+  let stopped=false;
+  let lastTime=performance.now();
+  const states=[];
+  const rand=seedRandom(year * 7919 + 41);
+
+  const MIN_WIDTH=105;  // a little smaller than the Internet Society example
+  const MAX_WIDTH=210;  // approximately the APC example in the screenshot
+  const EDGE_PAD=8;
+
+  function bounds(){
+    const width=Math.max(1,page.clientWidth);
+    const height=Math.max(page.clientHeight,page.scrollHeight);
+    layer.style.width=width+"px";
+    layer.style.height=height+"px";
+    return {width,height};
+  }
+
+  function choosePlacement(w,h,index){
+    const b=bounds();
+    const maxX=Math.max(EDGE_PAD,b.width-w-EDGE_PAD);
+    const maxY=Math.max(EDGE_PAD,b.height-h-EDGE_PAD);
+
+    // Spread initial positions over the whole page rather than a right-side cluster.
+    // A coarse grid plus jitter gives visible distribution without rigid alignment.
+    const cols=4;
+    const rows=Math.max(2,Math.ceil(items.length/cols));
+    const cell=index % (cols*rows);
+    const col=cell % cols;
+    const row=Math.floor(cell/cols);
+    const cellW=(maxX-EDGE_PAD)/Math.max(1,cols);
+    const cellH=(maxY-EDGE_PAD)/Math.max(1,rows);
+
+    let x=EDGE_PAD + col*cellW + rand()*Math.max(10,cellW*.82);
+    let y=EDGE_PAD + row*cellH + rand()*Math.max(10,cellH*.78);
+    x=Math.min(maxX,Math.max(EDGE_PAD,x));
+    y=Math.min(maxY,Math.max(EDGE_PAD,y));
+    return {x,y};
+  }
+
+  function randomDriftVelocity(){
+    const angle=rand()*Math.PI*2;
+    const speed=13 + rand()*15; // slow, visible swimming
+    return {
+      vx:Math.cos(angle)*speed,
+      vy:Math.sin(angle)*speed
+    };
+  }
+
+  items.forEach((item,index)=>{
+    const img=item.querySelector(".ambient-media");
+    const state={
+      item,img,index,
+      x:0,y:0,w:MIN_WIDTH,h:MIN_WIDTH*.55,
+      vx:0,vy:0,
+      phase:rand()*Math.PI*2,
+      phase2:rand()*Math.PI*2,
+      freq:.18 + rand()*.28,
+      freq2:.13 + rand()*.23,
+      lastRepel:0,
+      ready:false
+    };
+    states.push(state);
+
+    const prepare=()=>{
+      if(stopped || state.ready) return;
+
+      const naturalW=Math.max(1,img.naturalWidth || MIN_WIDTH);
+      const naturalH=Math.max(1,img.naturalHeight || naturalW*.55);
+
+      // Use the original width when it already falls inside the visual range;
+      // otherwise clamp to the range defined by the screenshots. Within the
+      // range, allow only a small enlargement.
+      const slightScale=1 + rand()*.12;
+      const targetW=Math.min(
+        MAX_WIDTH,
+        Math.max(MIN_WIDTH, naturalW * slightScale)
+      );
+      const targetH=targetW * (naturalH/naturalW);
+
+      state.w=targetW;
+      state.h=targetH;
+      item.style.width=targetW.toFixed(1)+"px";
+      item.style.height=targetH.toFixed(1)+"px";
+
+      const p=choosePlacement(state.w,state.h,index);
+      state.x=p.x;
+      state.y=p.y;
+      const drift=randomDriftVelocity();
+      state.vx=drift.vx;
+      state.vy=drift.vy;
+      state.ready=true;
+
+      item.style.transform=`translate3d(${state.x}px,${state.y}px,0)`;
+      const revealDelay=Math.round(rand()*900);
+      window.setTimeout(()=>{
+        if(!stopped) item.classList.add("ready");
+      },revealDelay);
+    };
+
+    if(img.complete && img.naturalWidth) prepare();
+    else img.addEventListener("load",prepare,{once:true});
+
+    function repel(e,strong=true){
+      if(!state.ready) return;
+      const now=performance.now();
+      if(!strong && now-state.lastRepel<85) return;
+      state.lastRepel=now;
+
+      const rect=item.getBoundingClientRect();
+      const cx=rect.left+rect.width/2;
+      const cy=rect.top+rect.height/2;
+      let dx=cx-e.clientX;
+      let dy=cy-e.clientY;
+      let len=Math.hypot(dx,dy);
+
+      if(len<4){
+        const a=rand()*Math.PI*2;
+        dx=Math.cos(a);
+        dy=Math.sin(a);
+        len=1;
+      }
+
+      dx/=len;
+      dy/=len;
+
+      // Strong and deliberately variable impulse.
+      const impulse=(strong ? 270 : 120) + rand()*(strong ? 250 : 130);
+      state.vx += dx*impulse;
+      state.vy += dy*impulse;
+
+      // Add a sideways kick so repeated hovers do not produce the same path.
+      const tangent=(rand()-.5)*(strong ? 190 : 90);
+      state.vx += -dy*tangent;
+      state.vy += dx*tangent;
+    }
+
+    item.addEventListener("mouseenter",e=>repel(e,true));
+    item.addEventListener("mousemove",e=>repel(e,false));
+  });
+
+  function tick(now){
+    if(stopped) return;
+    const dt=Math.min(.032,Math.max(.001,(now-lastTime)/1000));
+    lastTime=now;
+
+    // Only spend animation work on the currently visible horizontal page.
+    const pageDistance=Math.abs(page.offsetLeft-viewport.scrollLeft);
+    const active=pageDistance < viewport.clientWidth*.78;
+
+    if(active){
+      const b=bounds();
+      states.forEach(s=>{
+        if(!s.ready) return;
+
+        // Soft changing current: it bends trajectories instead of making
+        // every image repeat a fixed loop.
+        const t=now/1000;
+        s.vx += Math.sin(t*s.freq+s.phase)*4.4*dt;
+        s.vy += Math.cos(t*s.freq2+s.phase2)*4.0*dt;
+
+        // After a strong hover impulse, gradually return to a slow drift.
+        const speed=Math.hypot(s.vx,s.vy);
+        if(speed>48){
+          const decay=Math.pow(.955,dt*60);
+          s.vx*=decay;
+          s.vy*=decay;
+        }else if(speed<10){
+          const drift=randomDriftVelocity();
+          s.vx += drift.vx*.12;
+          s.vy += drift.vy*.12;
+        }
+
+        s.x += s.vx*dt;
+        s.y += s.vy*dt;
+
+        const minX=EDGE_PAD;
+        const minY=EDGE_PAD;
+        const maxX=Math.max(minX,b.width-s.w-EDGE_PAD);
+        const maxY=Math.max(minY,b.height-s.h-EDGE_PAD);
+
+        // Hard page borders: images always stay fully inside the year page.
+        if(s.x<minX){
+          s.x=minX;
+          s.vx=Math.abs(s.vx)*(.78+rand()*.14);
+        }else if(s.x>maxX){
+          s.x=maxX;
+          s.vx=-Math.abs(s.vx)*(.78+rand()*.14);
+        }
+        if(s.y<minY){
+          s.y=minY;
+          s.vy=Math.abs(s.vy)*(.78+rand()*.14);
+        }else if(s.y>maxY){
+          s.y=maxY;
+          s.vy=-Math.abs(s.vy)*(.78+rand()*.14);
+        }
+
+        s.item.style.transform=`translate3d(${s.x.toFixed(2)}px,${s.y.toFixed(2)}px,0)`;
+      });
+    }
+
+    raf=requestAnimationFrame(tick);
+  }
+
+  raf=requestAnimationFrame(tick);
+
+  const controller={
+    stop(){
+      stopped=true;
+      if(raf) cancelAnimationFrame(raf);
+    }
+  };
+  ambientControllers.push(controller);
+  return controller;
+}
 
 function archiveHref(original) {
   const normalized=/^https?:\/\//i.test(original) ? original : "http://"+original;
+  if(/^https?:\/\/web\.archive\.org\/web\//i.test(normalized)) return normalized;
   return "https://web.archive.org/web/*/"+normalized;
 }
 
 function projectLink(link) {
+  const href = archiveHref(link.url);
+  const label = displayLinkLabel(link.label);
   return `<a
     class="project"
-    href="${archiveHref(link.url)}"
+    href="${href}"
     target="_blank"
     rel="noopener"
-    title="Wayback Machine: ${link.url}"
-  >${link.label} ↗</a>`;
+    title="Web Archive: ${link.url}"
+  >${label} ↗</a>`;
 }
 
 function columnCount(n) {
@@ -672,83 +1055,80 @@ function padDay(value){
 function dateCodeFromRussian(raw){
   const s=(raw||"").toLowerCase().trim().replace(/\s+/g," ");
 
-  // Any non-calendar / vague date gets the same cyan marker.
-  if(/^\d{4}$/.test(s)) return {type:"special",text:"/!"};
-  if(/^(конец|середина)\s+года$/.test(s)) return {type:"special",text:"/!"};
+  const one=(value)=>({lines:[value,""]});
+  const two=(first,second)=>({lines:[first,second]});
 
-  // конец марта -> /03 (month remains useful, wording is omitted)
+  // Vague/non-calendar date: keep the agreed /! marker.
+  if(/^\d{4}$/.test(s)) return one("/!");
+  if(/^(конец|середина)\s+года$/.test(s)) return one("/!");
+
+  // конец марта / начало марта -> /03
   let edge=s.match(/^(?:конец|начало)\s+([а-яё]+)$/i);
   if(edge){
     const mm=monthNumber(edge[1]);
-    if(mm) return {type:"single",text:`/${mm}`};
+    if(mm) return one(`/${mm}`);
   }
 
-  // 15 июня — август -> 15/06–/08
-  let partial=s.match(/^(\d{1,2})\s+([а-яё]+)\s*[—–-]\s*([а-яё]+)$/i);
-  if(partial){
-    const m1=monthNumber(partial[2]), m2=monthNumber(partial[3]);
-    if(m1&&m2) return {
-      type:"range",
-      text:`${padDay(partial[1])}/${m1}–/${m2}`
-    };
+  // 15 июня — август -> 15/06–  | /08
+  let m=s.match(/^(\d{1,2})\s+([а-яё]+)\s*[—–-]\s*([а-яё]+)$/i);
+  if(m){
+    const m1=monthNumber(m[2]), m2=monthNumber(m[3]);
+    if(m1&&m2) return two(`${padDay(m[1])}/${m1}–`,`/${m2}`);
   }
 
-  // 19 августа — 4 сентября  -> 19/08–4/09
-  let m=s.match(/^(\d{1,2})\s+([а-яё]+)\s*[—–-]\s*(\d{1,2})\s+([а-яё]+)$/i);
+  // март — 1 апреля -> /03– | 1/04
+  m=s.match(/^([а-яё]+)\s*[—–-]\s*(\d{1,2})\s+([а-яё]+)$/i);
+  if(m){
+    const m1=monthNumber(m[1]), m2=monthNumber(m[3]);
+    if(m1&&m2) return two(`/${m1}–`,`${padDay(m[2])}/${m2}`);
+  }
+
+  // 19 августа — 4 сентября -> 19/08– | 4/09
+  m=s.match(/^(\d{1,2})\s+([а-яё]+)\s*[—–-]\s*(\d{1,2})\s+([а-яё]+)$/i);
   if(m){
     const m1=monthNumber(m[2]), m2=monthNumber(m[4]);
-    if(m1&&m2) return {
-      type:"range",
-      text:`${padDay(m[1])}/${m1}–${padDay(m[3])}/${m2}`
-    };
+    if(m1&&m2) return two(`${padDay(m[1])}/${m1}–`,`${padDay(m[3])}/${m2}`);
   }
 
-  // 8 / 21 ноября -> 8–21/11
+  // 8–21 ноября / 8 / 21 ноября -> 8–21 | /11
   m=s.match(/^(\d{1,2})\s*(?:\/|—|–|-)\s*(\d{1,2})\s+([а-яё]+)$/i);
   if(m){
     const mm=monthNumber(m[3]);
-    if(mm) return {
-      type:"range",
-      text:`${padDay(m[1])}–${padDay(m[2])}/${mm}`
-    };
+    if(mm) return two(`${padDay(m[1])}–${padDay(m[2])}`,`/${mm}`);
   }
 
   // 28 августа -> 28/08
   m=s.match(/^(\d{1,2})\s+([а-яё]+)$/i);
   if(m){
     const mm=monthNumber(m[2]);
-    if(mm) return {
-      type:"single",
-      text:`${padDay(m[1])}/${mm}`
-    };
+    if(mm) return one(`${padDay(m[1])}/${mm}`);
   }
 
-  // март — апрель -> /03–/04
+  // март — апрель -> /03– | /04
   m=s.match(/^([а-яё]+)\s*[—–-]\s*([а-яё]+)$/i);
   if(m){
     const m1=monthNumber(m[1]), m2=monthNumber(m[2]);
-    if(m1&&m2) return {
-      type:"range",
-      text:`/${m1}–/${m2}`
-    };
+    if(m1&&m2) return two(`/${m1}–`,`/${m2}`);
   }
 
   // январь -> /01
   m=s.match(/^([а-яё]+)$/i);
   if(m){
     const mm=monthNumber(m[1]);
-    if(mm) return {
-      type:"single",
-      text:`/${mm}`
-    };
+    if(mm) return one(`/${mm}`);
   }
 
-  return {type:"special",text:"/!"};
+  return one("/!");
 }
 
 function dateMarkup(ev){
   const code=dateCodeFromRussian(ev.date.ru);
-  return `<div class="date-code ${code.type==="range"?"range":""}">${code.text}</div>`;
+  const first=code.lines[0] || "";
+  const second=code.lines[1] || "";
+  return `<div class="date-code">
+    <span class="date-line">${first}</span>
+    <span class="date-line ${second ? "" : "empty"}">${second || "—"}</span>
+  </div>`;
 }
 
 function eventHtml(ev) {
@@ -763,6 +1143,7 @@ function eventHtml(ev) {
 }
 
 function render() {
+  stopAmbientControllers();
   track.innerHTML="";
   yearNav.innerHTML="";
 
@@ -781,9 +1162,10 @@ function render() {
       .join("");
 
     const page=document.createElement("section");
-    page.className="year-page";
+    page.className="year-page year-" + entry.year;
     page.dataset.index=index;
     page.innerHTML=`
+      ${ambientHtml(entry.year)}
       <div class="year-layout">
         <aside class="year-aside">
           <div class="year-ghost" aria-hidden="true">${entry.year}</div>
@@ -796,6 +1178,7 @@ function render() {
       </div>
     `;
     track.appendChild(page);
+    initAmbient(page, entry.year);
   });
 
   updateHeader();
@@ -812,11 +1195,13 @@ function updateHeader() {
 
   document.getElementById("subtitle").innerHTML=
     state.lang==="ru"
-      ? `интерактивный пересказ Летописи русского интернета <a class="author" href="https://www.netslova.ru/gorny/" target="_blank" rel="noopener">Евгения Горного</a>`
-      : `an interactive retelling of the Chronicle of the Russian Internet by <a class="author" href="https://www.netslova.ru/gorny/" target="_blank" rel="noopener">Evgeny Gorny</a>`;
+      ? `интерактивный пересказ Летописи русского интернета <a class="author" href="https://web.archive.org/web/*/https://www.netslova.ru/gorny/" target="_blank" rel="noopener">Евгения Горного</a>`
+      : `an interactive retelling of the Chronicle of the Russian Internet by <a class="author" href="https://web.archive.org/web/*/https://www.netslova.ru/gorny/" target="_blank" rel="noopener">Evgeny Gorny</a>`;
 
   document.getElementById("ru").classList.toggle("active",state.lang==="ru");
   document.getElementById("en").classList.toggle("active",state.lang==="en");
+  document.getElementById("colorLabel").textContent = state.lang==="ru" ? "цвет" : "accent";
+  document.getElementById("accentPicker").value = state.accent;
 
   document.querySelectorAll(".year-btn")
     .forEach((btn,i)=>btn.classList.toggle("active",i===state.current));
@@ -850,6 +1235,7 @@ document.getElementById("prev").addEventListener("click",()=>go(state.current-1)
 document.getElementById("next").addEventListener("click",()=>go(state.current+1));
 document.getElementById("ru").addEventListener("click",()=>{state.lang="ru";render()});
 document.getElementById("en").addEventListener("click",()=>{state.lang="en";render()});
+document.getElementById("accentPicker").addEventListener("input",(e)=>applyAccent(e.target.value));
 
 viewport.addEventListener("wheel",(e)=>{
   const page=e.target.closest(".year-page");
@@ -902,6 +1288,7 @@ viewport.addEventListener("scroll",()=>{
   }
 });
 
+applyAccent(state.accent);
 render();
 </script>
 </body>
